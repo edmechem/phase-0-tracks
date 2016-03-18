@@ -8,3 +8,8 @@ section#contact-info {
    	margin-bottom: 6;
     --padding: 8px 20px;
 }
+
+.accomplishment {
+  font-size: .8em;
+}
+
