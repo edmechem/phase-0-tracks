@@ -13,3 +13,10 @@ section#contact-info {
   font-size: .8em;
 }
 
+li:first-child {
+    color: blue;
+}
+
+section.volunteer-gig li:last-child {
+	font-style: italic;
+}
