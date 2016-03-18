@@ -27,3 +27,8 @@ border. */
 section#contact-info p:last-of-type {
   border-right: none;
 }
+
+section#contact-info p:nth-child(even) {
+  --background-color: gray;
+}
+
