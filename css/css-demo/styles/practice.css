@@ -1,0 +1,22 @@
+section#contact-info {
+  font-size: .8em;
+}
+
+.job {
+	background-color: #e9e5dc;
+	border-radius: 12px;
+   	margin-bottom: 6;
+    --padding: 8px 20px;
+}
+
+.accomplishment {
+  font-size: .8em;
+}
+
+li:first-child {
+    color: blue;
+}
+
+section.volunteer-gig li:last-child {
+	font-style: italic;
+}
