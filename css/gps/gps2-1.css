@@ -1,0 +1,47 @@
+body {
+  font-family: "Helvetica", Helvetica, sans-serif;
+  background-color: white;
+}
+
+header {
+  margin: 0px 15px 15px 15px;
+  background-image: url("http://i765.photobucket.com/albums/xx293/Claudinenetto/Background/1216678135-365-0.png");
+}
+
+h1, h2, p, ul {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+h2 {
+  margin-top: 8px;
+}
+
+header, footer, section {
+  padding: 0px 15px 0px 15px;
+  border: 2px solid gray;
+  border-radius: 6px;
+}
+
+.column-1, .column-2 {
+  width: 43%;
+  vertical-align: top;
+  border: 2px solid gray;
+  background-color: #F2F2F2;
+}
+
+.column-1 {
+    float: left;
+    margin: 0px 7px 15px 15px;
+}
+
+.column-2 {
+    float: right;
+    margin: 0px 15px 15px 7px;
+}
+
+footer {
+  clear: both;
+  margin: 15px 15px 0px 15px;
+  background-image: url("http://i765.photobucket.com/albums/xx293/Claudinenetto/Background/1216678135-365-0.png");
+}
