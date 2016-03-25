@@ -1,0 +1,41 @@
+Elevator algorithm:
+
+1. Enter elevator.
+2. Turn 180%.
+3. Search until you recognize a panel with multiple buttons:
+    a. On wall to left of door
+    b. On wall to right of door
+4. Initialize an empty "button_array" (each 'button' will have x, y coordinates & button number)
+5. On panel of buttons, scan from top left to bottom right, until you see no more buttons. For each button:
+    a. Store x,y coordinates, as well as number, as new item in "button_array".
+8. "floor_valid" = false
+7. Until "floor_valid":
+        a. Get "desired_floor" from user (number)
+        b. If "desired_floor" is valid (i.e. is contained in button number element of some item of "button_array"):
+            i. Press button number "desired_floor" by pressing panel at its x,y coordinates
+            ii. "floor_valid" = true
+        else
+            Tell user you're sorry, but that's a floor this elevator can't go to.
+        end if
+    end
+
+Fresh Squeezed Orange Juice algorithm:
+
+1. Locate in kitchen: Orange, knife, cutting board, juicer, glass, counter with 2 sq. feet of clear space, sink, dishrack, compost bin
+2. Place cutting board on counter, juicer & glass on counter
+3. Place orange & knife on cutting board
+4. Using knife, cut orange in half
+5. Rinse knife in sink, put in dishrack
+6. For each orange half:
+    a. Pick up orange half
+    b. "no_more_juice" = false
+    c. Until "no_more_juice"
+        i. Observe juicer while pressing orange down on juicer & rotating orange 90%
+        ii. If juice did not flow down from juicer
+            "no_more_juice" = true
+        end
+    end
+7. Place both orange halves in compost bin
+8. Pour juice from juicer to glass
+9. Rinse cutting board & juicer in sink, put in dishrack
+10. Enjoy glass of fresh squeezed orange juice
