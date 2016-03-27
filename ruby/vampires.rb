@@ -164,4 +164,6 @@ while counter < how_many
 end
 
 puts "All done! We processed #{counter} employees."
-
+puts ""
+puts ""
+puts "Actually, never mind! What do these questions have to do with anything? Let's all be friends."
