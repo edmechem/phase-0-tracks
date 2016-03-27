@@ -106,18 +106,16 @@ while counter < how_many
 	# Note: In order to follow the instructions & match the conditions in the order
 	# the assignment lists them --- BUT --- still have the logic work properly,
 	# it was necessary to add
-	#     && !vampire_name  (defined as: (name == "Drake Cula" || name == "Tu Fang"))
-	# to the end of every condition except the last one.
+	#     && !vampire_name  (vampire_name defined as: (name == "Drake Cula" || name == "Tu Fang"))
+	# to every condition except the last one.
 
 	# Likewise with needing to add
-	#     && !(!age_right && !garlic && !insurance)
-	# to the end of the Probably condition.
+	#     && !very_suspicious (very_suspicious defined as: (!age_right && !garlic && !insurance))
+	# to the second ("Probably a vampire") condition.
 
-	# Of course the proper way to get the logic to work would be
-	# to rearrange the order of these conditions.
+	# Of course the proper way to get the logic to work, would be to rearrange the order of these conditions.  But the assignment asked for them in this order.
 
 	# Or.....    use a case statement?  Hm..
-
 
 
 
