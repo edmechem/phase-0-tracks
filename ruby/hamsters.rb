@@ -31,8 +31,21 @@ else
 	hamster_estimated_age = hamster_estimated_age.to_i
 end
 
-
 # # for testing class conversion
 # puts "Volume is a #{hamster_volume.class}."
 # puts "Candidacy is a #{hamster_good_candidate.class}."
 # puts "Estimated Age is a #{hamster_estimated_age.class}."
+
+
+# Print to console
+
+puts ""
+puts "OK, thanks for that info."
+puts "Here's what we have:"
+puts ""
+puts "                Hamster name: #{hamster_name}"
+puts "                Volume level: #{hamster_volume}"
+puts "                   Fur color: #{hamster_fur_color}"
+puts "    Good adoption candidate?: #{hamster_good_candidate}"
+puts "               Estimated age: #{hamster_estimated_age}"
+puts ""
