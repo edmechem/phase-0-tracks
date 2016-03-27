@@ -37,6 +37,22 @@ while counter < how_many
 		insurance = false
 	end
 
+
+	# Allergies
+ 	allergy = ""
+	sunshine_allergy = false
+ 	puts "Please name any allergies, one at a time. Type \"done\" when finished."
+ 	while allergy != "done"
+ 		allergy = gets.chomp
+ 		if allergy == "sunshine"
+ 			sunshine_allergy = true
+ 			break
+ 		end
+ 	end
+
+
+
+
 	# # Check what's been entered, by displaying it
 	# puts ""
 	# puts "Data entered:"
@@ -49,7 +65,7 @@ while counter < how_many
 	# puts ""
 
 
-	# Build expression to test age / birth_year correctness
+	# Test age / birth_year correctness, store in boolean variable
 	current_year = 2016
 	delta = (current_year - birth_year)
 	age_right = (delta == age || delta == (age + 1))
@@ -59,11 +75,21 @@ while counter < how_many
 	# puts ""
 
 
-	# Build expression to test obvious vampire name
+	# Test for obvious vampire name, store in boolean variable
 	vampire_name = (name == "Drake Cula" || name == "Tu Fang")
 
 	# # Check it by displaying it
 	# puts "#{name} is a vampire name? That's #{vampire_name}."
+	# puts ""
+
+
+	# For convenience, test for whether they answered all of 3 key questions suspiciously:
+	# (wrong age, no garlic bread, no insurance)
+	# and store result in boolean variable
+	very_suspicious = (!age_right && !garlic && !insurance)
+
+	# # Check it by displaying it
+	# puts "Age/year correct? #{age_right} - Garlic? #{garlic} - Insurance? #{insurance}. All 3 suspicious? #{very_suspicious}."
 	# puts ""
 
 
@@ -101,19 +127,19 @@ while counter < how_many
 	# If the employee got their age right,
 	# and is willing to eat garlic bread or sign up for insurance,
 	# the result is "Probably not a vampire."
-	if age_right && (garlic || insurance) && !vampire_name
+	if age_right && (garlic || insurance) && !vampire_name && !sunshine_allergy
 		result = "Probably not a vampire."
 
 	# If the employee got their age wrong,
 	# and hates garlic bread or waives insurance,
 	# the result is "Probably a vampire."
-	elsif (!age_right && (!garlic || !insurance)) && !(!age_right && !garlic && !insurance) && !vampire_name
+	elsif ((!age_right && (!garlic || !insurance)) && !very_suspicious && !vampire_name) || sunshine_allergy
 		result = "Probably a vampire."
 
 	# If the employee got their age wrong,
 	# hates garlic bread, and doesn’t want insurance,
 	# the result is "Almost certainly a vampire."
-	elsif (!age_right && !garlic && !insurance) && !vampire_name
+	elsif very_suspicious && !vampire_name
 		result = "Almost certainly a vampire."
 
 	# Even if the employee is an amazing liar otherwise,
