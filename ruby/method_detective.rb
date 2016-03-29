@@ -4,36 +4,44 @@
 # When there's more than one suspect who could have
 # committed the crime, add additional calls to prove it.
 
-# “iNvEsTiGaTiOn”.<???>
-# => “InVeStIgAtIoN”
 
-# “zom”.<???>
-# => “zoom”
+# First, though - we have to clean up after the wily rascal
+# who used “curly quotes”, & change them to "regular quotes"!
 
-# “enhance”.<???>
-#=> “    enhance    ”
+puts "iNvEsTiGaTiOn".swapcase
+# => "InVeStIgAtIoN"
 
-# “Stop! You’re under arrest!”.<???>
-# => “STOP! YOU’RE UNDER ARREST!”
+puts "zom".gsub(/o/, 'oo')
+# => "zoom"
 
-# “the usual”.<???>
-#=> “the usual suspects”
+puts "enhance".center(15)
+# => "    enhance    "
 
-#“ suspects”.<???>
-#=> “the usual suspects”
+puts "Stop! You’re under arrest!".upcase
+# => "STOP! YOU’RE UNDER ARREST!"
+# This is one of the culprits - ALL UPPER CASE!
 
-# “The case of the disappearing last letter”.<???>
-# => “The case of the disappearing last lette”
+puts "the usual".concat(" suspects")
+#=> "the usual suspects"
 
-# “The mystery of the missing first letter”.<???>
-# => “he mystery of the missing first letter”
+puts " suspects".prepend("the usual")
+# => "the usual suspects"
 
-# “Elementary  ,    my   dear      Watson!”.<???>""
-# => “Elementary, my dear Watson!”
+puts "The case of the disappearing last letter".chop
+# => "The case of the disappearing last lette"
+# This is the other culprit - chopping off the last letter!
 
-#“z”.<???>
+puts "The mystery of the missing first letter".reverse.chop.reverse
+# => "he mystery of the missing first letter"
+
+puts "Elementary  ,    my   dear      Watson!".squeeze(" ").gsub(' ,', ',')
+# => "Elementary, my dear Watson!"
+
+puts "z".ord
 # => 122 
 # (What is the significance of the number 122 in relation to the character z?)
+# It's the "ordinal" of this one character string;
+# in other words, the ASCII code for it.
 
-#“How many times does the letter ‘a’ appear in this string?”.<???>
-#=> 4
+puts "How many times does the letter ‘a’ appear in this string?".count "a"
+# => 4
