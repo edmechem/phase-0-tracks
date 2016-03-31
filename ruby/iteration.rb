@@ -38,3 +38,21 @@ an_array.map! do | an_integer |
 	an_integer.next
 end
 p an_array
+
+
+# Release 2 --------------------------------
+
+new_array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+p new_array
+
+# 1
+p new_array.delete_if { |number| number < 3 }
+
+# 2
+p new_array.keep_if { | number | number > 4 }
+
+# 3
+p new_array.drop(3)
+
+# 4
+p new_array.drop_while { | number | number != 10 }
