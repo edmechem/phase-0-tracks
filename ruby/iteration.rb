@@ -1,4 +1,8 @@
-# Release 0
+# 5.4 Pair - Iteration
+# Ed Mechem & Melissa Chaparro
+
+
+# Release 0 --------------------------------
 
 def print_block
 	puts "Hello I am a status message."
@@ -6,12 +10,10 @@ def print_block
 	puts "Last status message"
 end
 
-
-
 print_block {|string1,string2| puts "We have two strings: #{string1}, and #{string2}"}
 
 
-# Release 1
+# Release 0 --------------------------------
 
 an_array = [1, 2, 3, 4, 5]
 a_hash = {name: "Susan", age: 25, fave_color: "black"}
@@ -35,5 +37,4 @@ an_array.map! do | an_integer |
 	puts an_integer
 	an_integer.next
 end
-
 p an_array
