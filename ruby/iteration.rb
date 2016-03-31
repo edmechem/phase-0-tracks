@@ -13,7 +13,7 @@ end
 print_block {|string1,string2| puts "We have two strings: #{string1}, and #{string2}"}
 
 
-# Release 0 --------------------------------
+# Release 1 --------------------------------
 
 an_array = [1, 2, 3, 4, 5]
 a_hash = {name: "Susan", age: 25, fave_color: "black"}
