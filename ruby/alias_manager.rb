@@ -1,7 +1,7 @@
 # OUR METHOD DECLARATIONS
 
 # Define method to return true if letter is vowel, false if not
-def is_vowel(letter)
+def is_vowel (letter)
 	vowels = 'aeiou'.chars
 	vowels.index(letter) != nil
 end
@@ -9,19 +9,19 @@ end
 # p is_vowel(test)
 
 # Define method to return next vowel
-def get_next_vowel(vowel)
+def get_next_vowel (vowel)
 	return 'a' if vowel == 'u'
 	vowels = 'aeiou'.chars
-	vowels[vowels.index(vowel)+1]
+	vowels[ vowels.index(vowel) + 1 ]
 end
 # test = 'a'
 # p get_next_vowel(test)
 
 # Define method to return next consonant
-def get_next_consonant(consonant)
+def get_next_consonant (consonant)
 	return 'b' if consonant == 'z'
 	consonants = 'bcdfghjklmnpqrstvwxyz'.chars
-	consonants[consonants.index(consonant)+1]
+	consonants[ consonants.index(consonant) + 1 ]
 end
 # very similar to get next vowel
 
@@ -39,16 +39,89 @@ end
 # p get_swapped_char(test)
 
 
+# Define method to swap first & last name and change characters,
+# generating fake name
+
+def make_fake_name (name)
+	# Swap first & last name
+	swap_name = name.split(' ').reverse.join(' ')
+
+	# Swap characters - change all vowels to next vowel,
+	# and all consonants to next consonant
+
+	# Initialize fake_name & index (counter) variables 
+	fake_name = ''
+	index = 0
+	while index < swap_name.length
+		char = swap_name[index]
+
+		# For each character
+		if char == ' '
+			# If space, add space
+			fake_name += ' '
+		else
+			# Handle lower & uppercase properly
+			if char == char.downcase
+				fake_name += get_swapped_char(char)
+			else
+				fake_name += get_swapped_char(char.downcase).upcase
+			end
+		end
+
+		# Increment counter
+		index += 1
+	end
+
+	fake_name
+end
+
+
+
+
 # OUR DRIVER CODE
 
 # Get spy's real name
 p 'Hello spy! Enter your real name:'
 name = gets.chomp
 
-# Swap first & last name
-fake_name = name.split(' ').reverse.join(' ')
-p fake_name
+fake_name = make_fake_name(name)
+p 'Your fake name is: ' + fake_name
 
-# Change all the vowels to the next vowel in 'aeiou',
-# and all consonants to next consonant in alphabet
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
