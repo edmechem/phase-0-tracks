@@ -41,7 +41,6 @@ end
 
 # Define method to swap first & last name and change characters,
 # generating fake name
-
 def make_fake_name (name)
 	# Swap first & last name
 	swap_name = name.split(' ').reverse.join(' ')
@@ -83,24 +82,41 @@ end
 # Begin, greeting
 puts "Hello spy! Let's create some fake names."
 
+# Initialize array for real_name/fake_name hashes
+names = []
+
 # Loop until they type 'quit' to quit
 done = false
 until done do
 
 	# Get the spy's real name
 	puts ""
-	puts "Enter a real name (or 'quit' when done):"
-	name = gets.chomp
+	puts "Enter a name (or 'quit' when done):"
+	real_name = gets.chomp
 
-	if name == 'quit'
+	if real_name == 'quit'
 		# Done
 		puts ""
 		puts "OK, we're done!"
 		done = true
 	else
-		# Make fake name
-		fake_name = make_fake_name(name)
-		puts "#{name} is also known as #{fake_name}"
-	end 
+		# Make fake name, display it
+		fake_name = make_fake_name(real_name)
+		puts "...aka #{fake_name}"
 
+		# Make a hash of real & fake names
+		name_pair = {
+			real_name: real_name,
+			fake_name: fake_name
+		}
+
+		# Push it into names array
+		names.push(name_pair)
+	end 
 end
+
+# Print out all data in names array
+puts "Here's that data:"
+puts ""
+names.each { | name_pair | puts "   #{name_pair[:real_name]} is also known as #{name_pair[:fake_name]}" }
+puts ""
