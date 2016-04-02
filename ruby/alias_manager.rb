@@ -80,48 +80,27 @@ end
 
 # OUR DRIVER CODE
 
-# Get spy's real name
-p 'Hello spy! Enter your real name:'
-name = gets.chomp
+# Begin, greeting
+puts "Hello spy! Let's create some fake names."
 
-fake_name = make_fake_name(name)
-p 'Your fake name is: ' + fake_name
+# Loop until they type 'quit' to quit
+done = false
+until done do
 
+	# Get the spy's real name
+	puts ""
+	puts "Enter a real name (or 'quit' when done):"
+	name = gets.chomp
 
+	if name == 'quit'
+		# Done
+		puts ""
+		puts "OK, we're done!"
+		done = true
+	else
+		# Make fake name
+		fake_name = make_fake_name(name)
+		puts "#{name} is also known as #{fake_name}"
+	end 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+end
