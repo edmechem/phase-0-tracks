@@ -1,14 +1,16 @@
-SPECIES ------------------------
-Puppyus Adorableus
+# Puppy Class Design
 
-CHARACTERISTICS ----------------
-Tail length: varies
-Friendly: yes
-Name: varies
-Color: varies
+# SPECIES ------------------------
+# Puppyus Adorableus
 
-BEHAVIOR -----------------------
-Fetch
-Sit
-Lie down
-Roll over
+# CHARACTERISTICS ----------------
+# Tail length: varies
+# Friendly: yes
+# Name: varies
+# Color: varies
+
+# BEHAVIOR -----------------------
+# Fetch
+# Sit
+# Lie down
+# Roll over
