@@ -1,4 +1,7 @@
 class Santa
+	# Release 3, refactored using attr_reader
+	attr_reader :gender, :ethnicity, :reindeer_ranking
+	attr_accessor :age
 
 	def initialize(gender, ethnicity)
 		puts "Initializing Santa instance ..."
@@ -17,8 +20,17 @@ class Santa
 	end
 
 	# setter methods
-	def celebrate_birthday=(unneeded_var)
-		@age += 1
+
+	# This was Release 2, but we've refactored it for Release 3
+	# def celebrate_birthday=(unneeded_var)
+	# 	@age += 1
+	# end
+
+	# New Release 3 code, takes an integer & adds (or subtracts!) it from age
+	# We'll just presume this is usually called with the ingeger "1"
+	# This takes advantage of attr_accessor
+	def celebrate_birthday=(years)
+		@age += years
 	end
 
 	def get_mad_at(reindeer_name)
@@ -26,24 +38,28 @@ class Santa
 		@reindeer_ranking.push(reindeer_name)
 	end
 
-	# getter methods
-	def gender
-		@gender
-	end
 
-	def ethnicity
-		@ethnicity
-	end
+	# These were Release 2 methods; they're no longer needed
+	# after the Release 3  refactoring
 
-	# getter method to test celebrate_birthday method...
-	def age
-		@age
-	end
+	# # getter methods
+	# def gender
+	# 	@gender
+	# end
 
-	# getter method to test get_mad_at method...
-	def reindeer_ranking
-		@reindeer_ranking
-	end
+	# def ethnicity
+	# 	@ethnicity
+	# end
+
+	# # getter method to test celebrate_birthday method...
+	# def age
+	# 	@age
+	# end
+
+	# # getter method to test get_mad_at method...
+	# def reindeer_ranking
+	# 	@reindeer_ranking
+	# end
 end
 
 
@@ -62,7 +78,7 @@ end
 # puts ""
 
 
-# Release 1
+# Release 1 (& subsequent)
 santas = []
 new_santa_data = [
 	["bigender", "Icelandic"],
@@ -80,7 +96,6 @@ puts ""
 # puts "Done."
 # puts ""
 
-
 puts "Testing Release 2..."
 puts ""
 
@@ -89,12 +104,20 @@ puts "Here's the Santas' gender & ethnicities:"
 santas.each_index { | idx | puts "    Santa #{idx +1}'s gender is \"#{santas[idx].gender}\"; their ethnicity is \"#{santas[idx].ethnicity}\""}
 puts ""
 
-# Test Release 2, celebrate_birthday setter method
+# # Test Release 2, celebrate_birthday setter method
+# puts "Let's age Santa 3 by 5 years!!!!!"
+# puts "    Santa 3's original age is: #{santas[2].age}"
+# 5.times { santas[2].celebrate_birthday = nil }
+# puts "    Santa 3's new age is: #{santas[2].age}!"
+# puts ""
+
+# Test Release 3, refactored celebrate_birthday method (uses attr_accessor)
 puts "Let's age Santa 3 by 5 years!!!!!"
 puts "    Santa 3's original age is: #{santas[2].age}"
-5.times { santas[2].celebrate_birthday = nil }
+5.times { santas[2].celebrate_birthday = 1 }
 puts "    Santa 3's new age is: #{santas[2].age}!"
 puts ""
+
 
 # Test Release 2, get_mad_at setter method
 bad_reindeer = "Vixen"
@@ -105,3 +128,4 @@ santas[0].get_mad_at(bad_reindeer)
 puts "Now they've done it! Santa 1 is hopping mad at #{bad_reindeer}!!!"
 puts "New ranking is #{santas[0].reindeer_ranking}!"
 puts ""
+
