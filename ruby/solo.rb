@@ -14,32 +14,31 @@
 
 
 class Hoop
-	attr_reader :size, :spin_counter
-	attr_accessor :color, :brightness, :state
+	attr_reader :size, :spin_counter, :state
+	attr_accessor :color, :brightness
 
 	def initialize(size, color, brightness)
 		# puts "Initializing LED Hula Hoop ..."
 		@size = size
 		@color = color
 		@brightness = brightness
-
 		@state = "down"
 		@spin_counter = 0
 	end
 
 	def pick_up
-		puts "*picks up hoop*"
+		puts "  *picks up hoop*"
 		@state = "up"
 	end
 
 	def spin(int)
-		int.times { puts "*spins hula hoop...*" }
+		int.times { puts "  *spins hoop...*" }
 		@state = "spinning"
 		@spin_counter += int
 	end
 
 	def put_down
-		puts "*puts hoop down*"
+		puts "  *puts hoop down*"
 		@state = "down"
 	end
 
@@ -71,7 +70,7 @@ until done
 
 	puts "Brightness level? (1, 2, 3, - or return for 2)?"
 	brightness = gets.chomp.to_i
-	if brightness == ""
+	if brightness == 0
 		brightness = 2
 	end
 	
@@ -90,26 +89,38 @@ until done
 	end
 end
 
-# Print out attributes of the hoop
+
+# Test for 'only one hoop'
+only_one = false
+descriptor = "hoops"
+if hoops.length == 1
+	only_one = true
+	descriptor = "hoop"
+end
+
+# Print out attributes of the hoop(s)
 puts ""
-puts "OK, that's #{hoops.length} hoops:"
+puts "OK, that's #{hoops.length} #{descriptor}:"
 hoops.each_index { | idx | puts "  ##{idx+1}: #{hoops[idx].size} size, #{hoops[idx].color} color, brightness: #{hoops[idx].brightness}"}
-puts ""
 
 
 
 # Extra credit, because... 
 # Make hoops, but not play with them? That would be crazy!
 
-# First, ask them which one they want to play with
-puts ""
-puts "Which hoop would you like to play with?"
-puts "Type a number from 1 to #{hoops.length}:"
-which_hoop = gets.chomp.to_i
-hoop = hoops[which_hoop - 1]
-puts ""
-puts "Great choice! That's hoop ##{which_hoop}:"
-puts "  #{hoop.size}, #{hoop.color}, brightness: #{hoop.brightness}"
+# First, if there's more than one hoop, ask them which one they want to play with
+if only_one
+	hoop = hoops[0]
+else
+	puts ""
+	puts "Which hoop would you like to play with?"
+	puts "Type a number from 1 to #{hoops.length}:"
+	which_hoop = gets.chomp.to_i
+	hoop = hoops[which_hoop - 1]
+	puts ""
+	puts "Great choice! That's hoop ##{which_hoop}:"
+	puts "  #{hoop.size}, #{hoop.color}, brightness: #{hoop.brightness}"
+end
 
 # Let them change color or brightness if they want to
 puts ""
@@ -128,12 +139,12 @@ else
 		hoop.brightness = gets.chomp.to_i
 	end
 	puts ""		
-	puts "OK, your hoop attributes are now:"
+	puts "Your hoop attributes are now:"
 	puts "  #{hoop.size}, #{hoop.color}, brightness: #{hoop.brightness}"
+	puts ""
 end
 
 # OK, let's play
-puts ""
 puts "OK, let's play!"
 
 # Loop until they're done
@@ -159,10 +170,10 @@ until done
 			prompt = "Type a number to keep spinning hoop that many times,"
 		end
 		puts prompt
-		puts "or type 'down' to put the hoop down" 
+		puts "or hit return to put the hoop down"
 
 		input = gets.chomp
-		if input == 'down'
+		if input == ""
 			hoop.put_down
 		else
 			hoop.spin(input.to_i)
