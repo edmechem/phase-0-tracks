@@ -1,15 +1,46 @@
+# # Release 1: Write a Simple Module (Standalone)
+
+# module Shout
+
+# 	def self.yell_angrily(words)
+# 		words + "!!!" + " :("
+# 	end
+
+# 	def self.yelling_happily(words)
+# 		words + "!!!" + " Yay! :D"
+# 	end
+
+# end
+
+
+# Release 3: Convert Standalone Module to a Mixin
+# (take out .self from method definitions)
+# (add puts to methods)
+
 module Shout
 
-	def self.yell_angrily(words)
-		words + "!!!" + " :("
+	def yell_angrily(words)
+		puts words + "!!!" + " :("
 	end
 
-	def self.yelling_happily(words)
-		words + "!!!" + " Yay! :D"
+	def yelling_happily(words)
+		puts words + "!!!" + " Yay! :D"
 	end
-
+	
 end
 
 
-puts Shout.yell_angrily("Dammit")
-puts Shout.yelling_happily("Wow")
+class Protester
+	include Shout
+end
+
+class Pitcher
+	include Shout
+end
+
+
+protester = Protester.new
+protester.yell_angrily("Hey ho, hey ho, racism, sexism & inequality have got to go")
+
+pitcher = Pitcher.new
+pitcher.yelling_happily("Strikeout")
