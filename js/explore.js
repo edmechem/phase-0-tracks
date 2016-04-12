@@ -1,10 +1,17 @@
 // Function that takes a string, and reverses it
 function reverse(input) {
 	// Declare empty 'reversed' string that will contain the input reversed
-	// Get length of input; use that as an index loop counter
+	var reversed = "";
+
 	// Counting backwards, for each character
-	//   Add it to 'reversed'
+	for (var i = input.length - 1; i >= 0; i--) {
+		// Add it to 'reversed'
+		reversed = reversed + input[i];
+	}
+
+
 	// When done, return 'reversed'
+	return reversed;
 }
 
 
