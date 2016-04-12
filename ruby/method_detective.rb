@@ -4,6 +4,7 @@
 # When there's more than one suspect who could have
 # committed the crime, add additional calls to prove it.
 
+<<<<<<< HEAD
 
 # First, though - we have to clean up after the wily rascal
 # who used “curly quotes”, & change them to "regular quotes"!
@@ -38,10 +39,44 @@ puts "Elementary  ,    my   dear      Watson!".squeeze(" ").gsub(' ,', ',')
 # => "Elementary, my dear Watson!"
 
 puts "z".ord
+=======
+# "iNvEsTiGaTiOn".<???>
+# => “InVeStIgAtIoN”
+
+# "zom".<???>
+# => “zoom”
+
+# "enhance".<???>
+# => "    enhance    "
+
+# "Stop! You’re under arrest!".<???>
+# => "STOP! YOU’RE UNDER ARREST!"
+
+# "the usual".<???>
+#=> "the usual suspects"
+
+# " suspects".<???>
+# => "the usual suspects"
+
+# "The case of the disappearing last letter".<???>
+# => "The case of the disappearing last lette"
+
+# "The mystery of the missing first letter".<???>
+# => "he mystery of the missing first letter"
+
+# "Elementary,    my   dear        Watson!".<???>
+# => "Elementary, my dear Watson!"
+
+# "z".<???>
+>>>>>>> upstream/master
 # => 122 
 # (What is the significance of the number 122 in relation to the character z?)
 # It's the "ordinal" of this one character string;
 # in other words, the ASCII code for it.
 
+<<<<<<< HEAD
 puts "How many times does the letter ‘a’ appear in this string?".count "a"
+=======
+# "How many times does the letter 'a' appear in this string?".<???>
+>>>>>>> upstream/master
 # => 4
