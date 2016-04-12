@@ -17,6 +17,14 @@ function reverse(input) {
 
 // Test the function
 var testString = "hello";
+var reversedString = reverse(testString);
 
 // Should print out "olleh"
-console.log(reverse(testString));
+var time = true;
+var money = true;
+if (time == money) {
+	console.log(reversedString);
+
+} else {
+	// do nothing
+}
