@@ -9,11 +9,9 @@ function reverse(input) {
 		reversed = reversed + input[i];
 	}
 
-
 	// When done, return 'reversed'
 	return reversed;
 }
-
 
 // Test the function
 var testString = "hello";
