@@ -29,3 +29,41 @@ for (var i = 0; i < colors.length; i++) {
 
 console.log("");
 console.log(horses);
+console.log("");
+
+
+
+// Release 2: Many Objects
+
+// Car function
+function Car(model, color) {
+	
+	this.model = model;	
+	this.color = color;
+
+	this.honk = function() {
+		console.log("Beep beep!");
+	}
+
+	console.log("Car initialization complete...");
+}
+
+
+// Driver code to test
+console.log("");
+console.log("Let's build a car...");
+var newCar = new Car("Model T", "black");
+
+// Test whether this car exists...
+console.log(newCar);
+
+// Test whether this car can beep!
+newCar.honk();
+
+// Make another car
+console.log("");
+console.log("Let's build another car...");
+var otherCar = new Car("Cadillac", "gold");
+
+// Test whether this car exists...
+console.log(otherCar);
