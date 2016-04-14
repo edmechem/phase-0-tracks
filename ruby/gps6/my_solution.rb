@@ -32,7 +32,7 @@ class VirusPredictor
 
   # Takes the three instance variables, & uses an algorithm
   # to determine the predicted deaths.
-  def predicted_deaths(population_density, population, state)
+  def predicted_deaths(population_density, population, state) # doesn't need these!
     # predicted deaths is solely based on population density
     if @population_density >= 200
       number_of_deaths = (@population * 0.4).floor
@@ -79,18 +79,37 @@ end
 # DRIVER CODE
  # initialize VirusPredictor for each state
 
+# alabama = VirusPredictor.new("Alabama", STATE_DATA["Alabama"][:population_density], STATE_DATA["Alabama"][:population])
+# alabama.virus_effects
 
-alabama = VirusPredictor.new("Alabama", STATE_DATA["Alabama"][:population_density], STATE_DATA["Alabama"][:population])
-alabama.virus_effects
+# jersey = VirusPredictor.new("New Jersey", STATE_DATA["New Jersey"][:population_density], STATE_DATA["New Jersey"][:population])
+# jersey.virus_effects
 
-jersey = VirusPredictor.new("New Jersey", STATE_DATA["New Jersey"][:population_density], STATE_DATA["New Jersey"][:population])
-jersey.virus_effects
+# california = VirusPredictor.new("California", STATE_DATA["California"][:population_density], STATE_DATA["California"][:population])
+# california.virus_effects
 
-california = VirusPredictor.new("California", STATE_DATA["California"][:population_density], STATE_DATA["California"][:population])
-california.virus_effects
+# alaska = VirusPredictor.new("Alaska", STATE_DATA["Alaska"][:population_density], STATE_DATA["Alaska"][:population])
+# alaska.virus_effects
 
-alaska = VirusPredictor.new("Alaska", STATE_DATA["Alaska"][:population_density], STATE_DATA["Alaska"][:population])
-alaska.virus_effects
+
+# Release 5
+# Build the new driver code & test it:
+# STATE_DATA.each do | state_name, state_data|
+    # test the syntax
+    # puts "The data for #{state_name} is Density: #{state_data[:population_density]} and Population: #{state_data[:population]}"
+
+    # a_state = VirusPredictor.new( state_name, state_data[:population_density], state_data[:population])
+    # a_state.virus_effects
+# end
+
+# Lean final version:
+STATE_DATA.each { | state_name, state_data| VirusPredictor.new( state_name, state_data[:population_density], state_data[:population]).virus_effects }
+
+
+
+
+
+
 
 
 #=======================================================================
