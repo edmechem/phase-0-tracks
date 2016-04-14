@@ -116,9 +116,24 @@ STATE_DATA.each { | state_name, state_data| VirusPredictor.new( state_name, stat
 
 
 
-
-
-
-
 #=======================================================================
 # Reflection Section
+
+# The two different hash syntaxes in the state_data file, are "hash rocket" (the 'outer hash' where the state is the key, and its data is the value ) - and using symbol notation (:population_density and :population)
+
+# require_relative 'state_data' brings in the entire contents of the file 'state data', which consists entirely of one huge constant (the hashy hash of state data). "require" would do the exact same thing, but would require an absolute file path, versus a relative one - which would make it more brittle & less portable. So it's better to use require_relative.
+
+# hash.each is the most common & useful way of iterating through a hash we've learned so far. There are other methods that are conditional, i.e. hash.delete_if or hash.keep_if. One could also use "for k,v in {hash}" notation, which is very similar to each.
+
+# virus_effects as written, appeared to be passing meaningless variables to the two other methods it called - they were missing the @ symbol, so they weren't actually anything (as passed).  Everything worked, because virus_effects was passing the *correct number* of variables these two methods expected - *and* because, under the hood - the two methods really didn't even use what was passed to them - they just drew upon the instance variables that were filled in upon initialization.
+
+# The concept I most solidified in this challenge were hash notation, especially for hashes inside of hashes. I also learned about constants.
+
+
+
+
+
+
+
+
+
