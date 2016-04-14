@@ -1,12 +1,12 @@
 # Virus Predictor
 
 # I worked on this challenge by myself, with guide Jen Trudell.
-# I spent [#] hours total on this challenge (she guided for the first hour).
+# I spent 2 hours total on this challenge (she guided for the first hour).
 
 # EXPLANATION OF require_relative
 # 
 # require_relative allows this program to access data in another file, namely
-# 'state_data' (presumes the .rb filename extention), from the same directory
+# 'state_data' (presumes the .rb filename extension), from the same directory
 # that this file lives in.
 
 require_relative 'state_data'
@@ -29,8 +29,8 @@ class VirusPredictor
   end
 
   # Within a class, private serves as a dividing line - all methods above it are
-  # callable from outside the class, all methods below it are not callable
-  # from outside the class
+  # callable from outside the class, all methods below it are
+  # not callable from outside the class.
 
   # You'd want private methods, let's say - in a class used for banking. So, in this
   # example - only the "authorize_with_PIN" method (callable from outside) would be
@@ -38,25 +38,41 @@ class VirusPredictor
   # would be a private method, not callable from outside the class.
   private
 
-  # Takes the three instance variables, & uses an algorithm
-  # to determine the predicted deaths.
+
+  # Release 8 refactoring of predicted_deaths
+    
+  # Uses an algorithm to determine the predicted deaths.
   def predicted_deaths
     # predicted deaths is solely based on population density
+
+    # declare a multiplier variable
+    multiplier = 0.0
+
     if @population_density >= 200
-      number_of_deaths = (@population * 0.4).floor
+      multiplier = 0.4
     elsif @population_density >= 150
-      number_of_deaths = (@population * 0.3).floor
+      multiplier = 0.3
     elsif @population_density >= 100
-      number_of_deaths = (@population * 0.2).floor
+      multiplier = 0.2
     elsif @population_density >= 50
-      number_of_deaths = (@population * 0.1).floor
+      multiplier = 0.1
     else
-      number_of_deaths = (@population * 0.05).floor
+      multiplier = 0.05
     end
+
+    # now there's just 1 line representing the formula, instead of 5
+    number_of_deaths = (@population * multiplier).floor
 
     print "#{@state} will lose #{number_of_deaths} people in this outbreak"
 
   end
+
+
+  # Release 8 refactoring...   I can't really think of a way to refactor
+  # the speed_of_spread...   Perhaps a hash of density & additional_speed_to_add,
+  # and but then we'd need a way of seeing if the density was >= to the values
+  # which...  I don't know how we'd do that in any way that's more compact
+  # than what we have now...
 
   # Uses an algorithm based on density to determine a speed factor
   def speed_of_spread #in months
@@ -127,13 +143,4 @@ STATE_DATA.each { | state_name, state_data| VirusPredictor.new( state_name, stat
 
 # virus_effects as written, appeared to be passing meaningless variables to the two other methods it called - they were missing the @ symbol, so they weren't actually anything (as passed).  Everything worked, because virus_effects was passing the *correct number* of variables these two methods expected - *and* because, under the hood - the two methods really didn't even use what was passed to them - they just drew upon the instance variables that were filled in upon initialization.
 
-# The concept I most solidified in this challenge were hash notation, especially for hashes inside of hashes. I also learned about constants.
-
-
-
-
-
-
-
-
-
+# The concept I most solidified in this challenge were hash notation, especially for hashes inside of hashes. I also learned about constants.  I also learned a bit more about refactoring.
