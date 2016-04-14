@@ -28,6 +28,14 @@ class VirusPredictor
     speed_of_spread
   end
 
+  # Within a class, private serves as a dividing line - all methods above it are
+  # callable from outside the class, all methods below it are not callable
+  # from outside the class
+
+  # You'd want private methods, let's say - in a class used for banking. So, in this
+  # example - only the "authorize_with_PIN" method (callable from outside) would be
+  # allowed to call the "withdraw_cash" method - the "withdraw_cash" method
+  # would be a private method, not callable from outside the class.
   private
 
   # Takes the three instance variables, & uses an algorithm
