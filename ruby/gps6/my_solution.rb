@@ -1,7 +1,7 @@
 # Virus Predictor
 
-# I worked on this challenge [by myself, with: ].
-# We spent [#] hours on this challenge.
+# I worked on this challenge by myself, with guide Jen Trudell.
+# I spent [#] hours total on this challenge (she guided for the first hour).
 
 # EXPLANATION OF require_relative
 # 
@@ -24,15 +24,15 @@ class VirusPredictor
 
   # Call two other methods
   def virus_effects
-    predicted_deaths(@population_density, @population, @state)
-    speed_of_spread(@population_density, @state)
+    predicted_deaths
+    speed_of_spread
   end
 
   private
 
   # Takes the three instance variables, & uses an algorithm
   # to determine the predicted deaths.
-  def predicted_deaths(population_density, population, state) # doesn't need these!
+  def predicted_deaths
     # predicted deaths is solely based on population density
     if @population_density >= 200
       number_of_deaths = (@population * 0.4).floor
@@ -51,7 +51,7 @@ class VirusPredictor
   end
 
   # Uses an algorithm based on density to determine a speed factor
-  def speed_of_spread(population_density, state) #in months
+  def speed_of_spread #in months
     # We are still perfecting our formula here. The speed is also affected
     # by additional factors we haven't added into this functionality.
     speed = 0.0
