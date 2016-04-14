@@ -4,8 +4,11 @@
 # We spent [#] hours on this challenge.
 
 # EXPLANATION OF require_relative
-#
-#
+# 
+# require_relative allows this program to access data in another file, namely
+# 'state_data' (presumes the .rb filename extention), from the same directory
+# that this file lives in.
+
 require_relative 'state_data'
 
 class VirusPredictor
