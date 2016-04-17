@@ -7,16 +7,26 @@
  	// it'll return only the first
  	// 
  	// Declare string var called longestSoFar, initialize to ""
- 	// 
- 	// For each item, see if its length is longer than longestSoFar,
- 	// if so then push it into longestSoFar
- 	// 
+ 	var longestSoFar = "";
+
+  	// For each item,
+  	for (var i = 0; i < arrayOfStrings.length; i++) {
+  		// see if its length is longer than longestSoFar,
+ 		if (arrayOfStrings[i].length > longestSoFar.length) {
+		  	// if so then push it into longestSoFar
+		  	var longestSoFar = arrayOfStrings[i];
+ 		} else {
+ 			// do nothing
+ 		};
+  	};
  	// At the end, return longestSoFar
+ 	return longestSoFar;
  }
 
 
  // Driver code
 
  // Test the function
-var testArray = ["long phrase","longest phrase","longer phrase"];
-console.log(longestPhrase(testArray));
+var testArray = ["long phrase","longest phrases","longer phrase", "phrases longest"];
+console.log("Our test array is: " + testArray)
+console.log("The longest phrase is: " + longestPhrase(testArray));
