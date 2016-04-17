@@ -32,7 +32,7 @@ function findMatch(person1, person2) {
 	// Presuming the objects are key/value pairs
 	// Also presuming just two objects
 	// thus, this is very specific code (not general)
-	//
+
 	// Start off declaring returnValue boolean as false
 	var returnValue = false;
 
@@ -92,27 +92,55 @@ function findMatch(person1, person2) {
 
 // Release 2: Generate Random Test Data
 
-function randomWords(howMany) {
+function generateRandomWords(howMany) {
 	// Takes an int howMany, loops that many times, each loop generating
 	// a word filled with random letters, of randomly varying length
 	// from 1 to 10 characters
-	// 
+
 	// We need to figure out how to:
+	// 
 	//   - generate a random number from x to y (1 to 10, 1 to 26)
+	// Oh how tedious. According to:
+	//   http://www.w3schools.com/jsref/jsref_random.asp
+	// we have to do like:
+	//   Math.floor((Math.random() * 10) + 1);
+	// to get ruby's simple & elegant rand(1..10)
+	// OK, fine.
+	// 
 	//   - grab a character from a string, at some index value
-	// 
+	// Which is simple; charAt(x) where x is the index value
+
+
 	// Pseudocode looks like this:
-	// 
-	// Declare empty array randomWords 
+
+	// Declare empty array randomWords
+	var randomWords = [];
 	// Declare var theAlphabet of "abcdefghijklmnopqrstuvwxyz"
+	var theAlphabet = "abcdefghijklmnopqrstuvwxyz";
+
 	// For each of howMany
-	//   Declare an empty var thisWord
-	//   Declare a var wordLength, which is a random number from 1 thru 10
-	//   for wordLength times,
-	//     Add character at index (rand 0-25) of theAlphabet, to thisWord
-	//   Add thisWord to randomWords
-	// 
+	// ha, had to use w here and c for inner loop. Using i for both = FAIL
+	for (var w = 0; w < howMany; w++) {
+
+	  //   Declare an empty var thisWord
+	  var thisWord = "";
+	  //   Declare a var wordLength, which is a random number from 1 thru 10
+	  var wordLength = Math.floor((Math.random() * 10) + 1);
+	  // console.log("Word length is " + wordLength);
+
+	  //   for wordLength times,
+	  for (var c = 0; c < wordLength; c++) {
+	  //     Add character at index (rand 0..25) of theAlphabet, to thisWord
+	    var theIndex = (Math.floor((Math.random() * 26) + 1) - 1)
+	    thisWord = thisWord + theAlphabet.charAt(theIndex);
+	    };
+
+	  //   Add thisWord to randomWords
+	  randomWords.push(thisWord);
+	};
+
 	// When done with all that, return randomWords
+	return randomWords;
 }
 
 
@@ -146,5 +174,25 @@ console.log("Result of findMatch is: " + findMatch(person1, person2));
 
 
 // Test the randomWords function
-var randomWords = randomWords(3);
-console.log(randomWords);
+
+// Intro text
+console.log("");
+console.log("Ok, let's generate 10 arrays of 5 random words each.");
+console.log("For each array of random words, we'll print it, then feed it to");
+console.log("the 'longestPhrase' function, and print the result.");
+
+// Set up for loop, to do this 10 times
+for (var i = 0; i < 10; i++) {
+
+	// Print one line of whitespace before each group
+	console.log("");
+
+	// Generate & print the 5 random words
+	var myWords = generateRandomWords(5);
+	console.log("For these 5 words: " + myWords);
+
+	// Find & print the longest one of those 5
+	var myLongest = longestPhrase(myWords);
+	console.log("the longest one is: " + myLongest);
+}
+console.log("");
