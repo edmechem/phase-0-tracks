@@ -24,6 +24,7 @@ function longestPhrase(arrayOfStrings) {
 }
 
 
+
 // Release 1: Find a Key-Value Match
 
 function findMatch(person1, person2) {
@@ -39,13 +40,9 @@ function findMatch(person1, person2) {
 	//   (do I need to? may be able to just compare
 	//   the two objects directly)
 
-
 	// OK, I could do the easy thing & presume I know the values of the
 	// two keys: "name" & "age". But let's say I don't. Then, I'll need to
 	// loop thru each one, pulling these out.
-	// So:  this code will actually still work if I add more values,
-	// i.e. "faveColor" or "astrologicalSign" or whatnot.
-
 
 	// Well actually, I can probably get number of keys per object?
 	// Lemme research... Yep: 
@@ -60,12 +57,11 @@ function findMatch(person1, person2) {
 	//   ... obj[key] ...
 	// }
 
-
 	// So, we'll at least presume that the two objects
 	// have the same key/value pairs, and we're comparing the values.
-	// As I mentioned above, the code is now general enough -
-	// it loops for however many keys there are -
-	// That it will continue to work even if we add more keys
+	// As an added bonus, the code is general enough
+	// - it loops for however many keys there are -
+	// that, it will continue to work even if we add more keys,
 	// i.e. faveColor, astrologicalSign, etc.
 
 	// OK, for each key
@@ -80,16 +76,43 @@ function findMatch(person1, person2) {
 		// var person2val = person2[key];
 		// console.log("  Person 2 value: " + person2val);
 
-    	// We compare values, and if equal, set returnValue to true
-    	if (person1[key] == person2[key]) {
+		// We compare values, and if equal, set returnValue to true
+		if (person1[key] == person2[key]) {
 			// console.log("");
 			// console.log("True, " + key + " is " + person1[key] + " for both.");
 			var returnValue = true;
-    	};
+		};
 	};
  
 	// At end, return returnValue
 	return returnValue
+}
+
+
+
+// Release 2: Generate Random Test Data
+
+function randomWords(howMany) {
+	// Takes an int howMany, loops that many times, each loop generating
+	// a word filled with random letters, of randomly varying length
+	// from 1 to 10 characters
+	// 
+	// We need to figure out how to:
+	//   - generate a random number from x to y (1 to 10, 1 to 26)
+	//   - grab a character from a string, at some index value
+	// 
+	// Pseudocode looks like this:
+	// 
+	// Declare empty array randomWords 
+	// Declare var theAlphabet of "abcdefghijklmnopqrstuvwxyz"
+	// For each of howMany
+	//   Declare an empty var thisWord
+	//   Declare a var wordLength, which is a random number from 1 thru 10
+	//   for wordLength times,
+	//     Add character at index (rand 0-25) of theAlphabet, to thisWord
+	//   Add thisWord to randomWords
+	// 
+	// When done with all that, return randomWords
 }
 
 
@@ -101,6 +124,8 @@ function findMatch(person1, person2) {
 var testArray = ["long phrase","longest phrases","longer phrase", "phrases longest"];
 console.log("Our test array is: " + testArray)
 console.log("The longest phrase is: " + longestPhrase(testArray));
+
+
 
 // Test the findMatch function
 var person1 = {name: "Steven", age: 52, faveColor: "blue", astrologicalSign: "Scorpio"};
@@ -115,8 +140,11 @@ var person2 = {name: "Tamir", age: 54, faveColor: "green", astrologicalSign: "Sc
 // }
 // console.log("Length of person1 is: " + Object.keys(person1).length);
 
-
-// findMatch(person1,person2);
 console.log("");
 console.log("Result of findMatch is: " + findMatch(person1, person2));
 
+
+
+// Test the randomWords function
+var randomWords = randomWords(3);
+console.log(randomWords);
