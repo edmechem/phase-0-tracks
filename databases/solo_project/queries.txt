@@ -1,0 +1,88 @@
+8.3 Solo Challenge
+Ed Mechem
+
+
+Release 2: Execute SQL Queries
+
+1. Display the information in one table (either table is fine).
+ 
+sqlite> SELECT * FROM bicycles;
+1|Betty|30000|1|4|3|1
+2|Lance|90000|0|2|1|4
+3|Lizzy|60000|0|6|2|5
+4|Ralph|35000|0|5|3|3
+5|Amanda|90000|0|1|1|5
+6|Fred|55000|1|5|2|2
+
+sqlite> SELECT * FROM brands;
+1|Raleigh
+2|Trek
+3|Nishiki
+4|Electra
+5|Schwinn
+6|Marin
+
+sqlite> SELECT * FROM types;
+1|Road Bike
+2|Mountain Bike
+3|Cruiser
+
+sqlite> SELECT * FROM colors;
+1|Red
+2|Green
+3|Blue
+4|Silver
+5|Black
+
+
+2. Update an item that meets some condition (you can choose a condition that makes sense).
+
+sqlite> SELECT * FROM bicycles WHERE name="Ralph";
+4|Ralph|35000|0|5|3|3
+
+sqlite> UPDATE bicycles SET price=30000, onsale=1 WHERE name="Ralph";
+
+sqlite> SELECT * FROM bicycles WHERE name="Ralph";
+4|Ralph|30000|1|5|3|3
+
+
+3. Display the information in both tables using one query.
+
+sqlite> SELECT * FROM bicycles, brands, types, colors WHERE bicycles.brand_id = brands.id AND bicycles.type_id = types.id AND bicycles.color_id = colors.id;
+1|Betty|30000|1|4|3|1|4|Electra|3|Cruiser|1|Red
+2|Lance|90000|0|2|1|4|2|Trek|1|Road Bike|4|Silver
+3|Lizzy|60000|0|6|2|5|6|Marin|2|Mountain Bike|5|Black
+4|Ralph|30000|1|5|3|3|5|Schwinn|3|Cruiser|3|Blue
+5|Amanda|90000|0|1|1|5|1|Raleigh|1|Road Bike|5|Black
+6|Fred|55000|1|5|2|2|5|Schwinn|2|Mountain Bike|2|Green
+
+
+4. Display a narrower selection of columns (fewer columns than all of them, in other words) from both tables using one query.
+
+sqlite> .headers on
+sqlite> .mode column
+sqlite> .width 8 7 8 9 15 8
+sqlite> SELECT bicycles.name, bicycles.price, bicycles.onsale, brands.name, types.name, colors.name FROM bicycles JOIN brands ON bicycles.brand_id = brands.id JOIN types ON bicycles.type_id = types.id JOIN colors ON bicycles.color_id = colors.id; 
+name      price    onsale    name       name             name    
+--------  -------  --------  ---------  ---------------  --------
+Betty     30000    1         Electra    Cruiser          Red     
+Lance     90000    0         Trek       Road Bike        Silver  
+Lizzy     60000    0         Marin      Mountain Bike    Black   
+Ralph     30000    1         Schwinn    Cruiser          Blue    
+Amanda    90000    0         Raleigh    Road Bike        Black   
+Fred      55000    1         Schwinn    Mountain Bike    Green   
+
+
+5. Delete an item that meets some condition (you can choose a condition that makes sense).
+
+sqlite> DELETE FROM bicycles WHERE price < 35000 AND brand_id = 5;
+sqlite> SELECT bicycles.name, bicycles.price, bicycles.onsale, brands.name, types.name, colors.name FROM bicycles JOIN brands ON bicycles.brand_id = brands.id JOIN types ON bicycles.type_id = types.id JOIN colors ON bicycles.color_id = colors.id; 
+name      price    onsale    name       name             name    
+--------  -------  --------  ---------  ---------------  --------
+Betty     30000    1         Electra    Cruiser          Red     
+Lance     90000    0         Trek       Road Bike        Silver  
+Lizzy     60000    0         Marin      Mountain Bike    Black   
+Amanda    90000    0         Raleigh    Road Bike        Black   
+Fred      55000    1         Schwinn    Mountain Bike    Green   
+
+
