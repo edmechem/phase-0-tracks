@@ -86,3 +86,257 @@ Amanda    90000    0         Raleigh    Road Bike        Black
 Fred      55000    1         Schwinn    Mountain Bike    Green   
 
 
+Release 3: Research on Your Own
+
+Here's two pages explaining other types of JOINs:
+Stack Overflow:
+    http://stackoverflow.com/questions/17946221/sql-join-and-different-types-of-joins#17946222
+and Coding Horror (diagram):
+    http://blog.codinghorror.com/a-visual-explanation-of-sql-joins/
+not all of which actually are implemented & work in sqlite3.
+
+
+INNER JOIN (as described the in diagram above) seems to work fine, and is the functional equivalent of JOIN (INNER JOIN is Syntactic sugar for JOIN):
+sqlite> .headers on
+sqlite> .mode column
+sqlite> .width 3 8 7 6 8 7 8 3 9
+sqlite> SELECT * FROM bicycles INNER JOIN brands ON bicycles.brand_id = brands.id;
+id   name      price    onsale  brand_id  type_id  color_id  id   name     
+---  --------  -------  ------  --------  -------  --------  ---  ---------
+1    Betty     30000    1       4         3        1         4    Electra  
+2    Lance     90000    0       2         1        4         2    Trek     
+3    Lizzy     60000    0       6         2        5         6    Marin    
+5    Amanda    90000    0       1         1        5         1    Raleigh  
+6    Fred      55000    1       5         2        2         5    Schwinn  
+
+and:
+sqlite> .headers on
+sqlite> .mode column
+sqlite> .width 3 9 3 8 7 6 8 7 8
+sqlite> SELECT * FROM brands INNER JOIN bicycles ON brands.id = bicycles.brand_id;
+id   name       id   name      price    onsale  brand_id  type_id  color_id
+---  ---------  ---  --------  -------  ------  --------  -------  --------
+4    Electra    1    Betty     30000    1       4         3        1       
+2    Trek       2    Lance     90000    0       2         1        4       
+6    Marin      3    Lizzy     60000    0       6         2        5       
+1    Raleigh    5    Amanda    90000    0       1         1        5       
+5    Schwinn    6    Fred      55000    1       5         2        2       
+
+FULL OUTER JOIN fails (as would RIGHT OUTER JOIN):
+sqlite> SELECT * FROM bicycles FULL OUTER JOIN brands ON bicycles.brand_id = brands.id;
+Error: RIGHT and FULL OUTER JOINs are not currently supported
+
+LEFT OUTER JOIN seems to work fine (we could also say LEFT JOIN):
+sqlite> SELECT * FROM brands LEFT OUTER JOIN bicycles ON brands.id = bicycles.brand_id;
+id   name       id   name      price    onsale  brand_id  type_id  color_id
+---  ---------  ---  --------  -------  ------  --------  -------  --------
+1    Raleigh    5    Amanda    90000    0       1         1        5       
+2    Trek       2    Lance     90000    0       2         1        4       
+3    Nishiki                                                               
+4    Electra    1    Betty     30000    1       4         3        1       
+5    Schwinn    6    Fred      55000    1       5         2        2       
+6    Marin      3    Lizzy     60000    0       6         2        5       
+
+Note: Nishiki shows up, because it's part of brands, but then it has null values for bicycles (because we're currently out of stock on Nishiki!).
+
+When we filter the previous command using a WHERE command, we end up just with Nishiki alone:
+sqlite> SELECT * FROM brands LEFT OUTER JOIN bicycles ON brands.id = bicycles.brand_id WHERE bicycles.id IS null;
+id   name       id   name      price    onsale  brand_id  type_id  color_id
+---  ---------  ---  --------  -------  ------  --------  -------  --------
+3    Nishiki                                                               
+
+
+Finally, there is the dangerous CROSS JOIN, which does work in sqlite3, but which should be avoided with large tables, since it results in a multiple of rows (# of rows in table A * # of rows in table B, or in our case 30 rows):
+
+sqlite> .headers on
+sqlite> .mode column
+sqlite> .width 3 8 7 6 8 7 8 3 9
+sqlite> SELECT * FROM bicycles CROSS JOIN brands;
+id   name      price    onsale  brand_id  type_id  color_id  id   name     
+---  --------  -------  ------  --------  -------  --------  ---  ---------
+1    Betty     30000    1       4         3        1         1    Raleigh  
+1    Betty     30000    1       4         3        1         2    Trek     
+1    Betty     30000    1       4         3        1         3    Nishiki  
+1    Betty     30000    1       4         3        1         4    Electra  
+1    Betty     30000    1       4         3        1         5    Schwinn  
+1    Betty     30000    1       4         3        1         6    Marin    
+2    Lance     90000    0       2         1        4         1    Raleigh  
+2    Lance     90000    0       2         1        4         2    Trek     
+2    Lance     90000    0       2         1        4         3    Nishiki  
+2    Lance     90000    0       2         1        4         4    Electra  
+2    Lance     90000    0       2         1        4         5    Schwinn  
+2    Lance     90000    0       2         1        4         6    Marin    
+3    Lizzy     60000    0       6         2        5         1    Raleigh  
+3    Lizzy     60000    0       6         2        5         2    Trek     
+3    Lizzy     60000    0       6         2        5         3    Nishiki  
+3    Lizzy     60000    0       6         2        5         4    Electra  
+3    Lizzy     60000    0       6         2        5         5    Schwinn  
+3    Lizzy     60000    0       6         2        5         6    Marin    
+5    Amanda    90000    0       1         1        5         1    Raleigh  
+5    Amanda    90000    0       1         1        5         2    Trek     
+5    Amanda    90000    0       1         1        5         3    Nishiki  
+5    Amanda    90000    0       1         1        5         4    Electra  
+5    Amanda    90000    0       1         1        5         5    Schwinn  
+5    Amanda    90000    0       1         1        5         6    Marin    
+6    Fred      55000    1       5         2        2         1    Raleigh  
+6    Fred      55000    1       5         2        2         2    Trek     
+6    Fred      55000    1       5         2        2         3    Nishiki  
+6    Fred      55000    1       5         2        2         4    Electra  
+6    Fred      55000    1       5         2        2         5    Schwinn  
+6    Fred      55000    1       5         2        2         6    Marin    
+
+For *even more* fun, we can multiply by the 5 colors, ending up with 150 rows (honestly, I can't think of a good use case for CROSS JOIN...):
+sqlite> SELECT * FROM bicycles CROSS JOIN brands, colors;
+id|name|price|onsale|brand_id|type_id|color_id|id|name|id|name
+1|Betty|30000|1|4|3|1|1|Raleigh|1|Red
+1|Betty|30000|1|4|3|1|1|Raleigh|2|Green
+1|Betty|30000|1|4|3|1|1|Raleigh|3|Blue
+1|Betty|30000|1|4|3|1|1|Raleigh|4|Silver
+1|Betty|30000|1|4|3|1|1|Raleigh|5|Black
+1|Betty|30000|1|4|3|1|2|Trek|1|Red
+1|Betty|30000|1|4|3|1|2|Trek|2|Green
+1|Betty|30000|1|4|3|1|2|Trek|3|Blue
+1|Betty|30000|1|4|3|1|2|Trek|4|Silver
+1|Betty|30000|1|4|3|1|2|Trek|5|Black
+1|Betty|30000|1|4|3|1|3|Nishiki|1|Red
+1|Betty|30000|1|4|3|1|3|Nishiki|2|Green
+1|Betty|30000|1|4|3|1|3|Nishiki|3|Blue
+1|Betty|30000|1|4|3|1|3|Nishiki|4|Silver
+1|Betty|30000|1|4|3|1|3|Nishiki|5|Black
+1|Betty|30000|1|4|3|1|4|Electra|1|Red
+1|Betty|30000|1|4|3|1|4|Electra|2|Green
+1|Betty|30000|1|4|3|1|4|Electra|3|Blue
+1|Betty|30000|1|4|3|1|4|Electra|4|Silver
+1|Betty|30000|1|4|3|1|4|Electra|5|Black
+1|Betty|30000|1|4|3|1|5|Schwinn|1|Red
+1|Betty|30000|1|4|3|1|5|Schwinn|2|Green
+1|Betty|30000|1|4|3|1|5|Schwinn|3|Blue
+1|Betty|30000|1|4|3|1|5|Schwinn|4|Silver
+1|Betty|30000|1|4|3|1|5|Schwinn|5|Black
+1|Betty|30000|1|4|3|1|6|Marin|1|Red
+1|Betty|30000|1|4|3|1|6|Marin|2|Green
+1|Betty|30000|1|4|3|1|6|Marin|3|Blue
+1|Betty|30000|1|4|3|1|6|Marin|4|Silver
+1|Betty|30000|1|4|3|1|6|Marin|5|Black
+2|Lance|90000|0|2|1|4|1|Raleigh|1|Red
+2|Lance|90000|0|2|1|4|1|Raleigh|2|Green
+2|Lance|90000|0|2|1|4|1|Raleigh|3|Blue
+2|Lance|90000|0|2|1|4|1|Raleigh|4|Silver
+2|Lance|90000|0|2|1|4|1|Raleigh|5|Black
+2|Lance|90000|0|2|1|4|2|Trek|1|Red
+2|Lance|90000|0|2|1|4|2|Trek|2|Green
+2|Lance|90000|0|2|1|4|2|Trek|3|Blue
+2|Lance|90000|0|2|1|4|2|Trek|4|Silver
+2|Lance|90000|0|2|1|4|2|Trek|5|Black
+2|Lance|90000|0|2|1|4|3|Nishiki|1|Red
+2|Lance|90000|0|2|1|4|3|Nishiki|2|Green
+2|Lance|90000|0|2|1|4|3|Nishiki|3|Blue
+2|Lance|90000|0|2|1|4|3|Nishiki|4|Silver
+2|Lance|90000|0|2|1|4|3|Nishiki|5|Black
+2|Lance|90000|0|2|1|4|4|Electra|1|Red
+2|Lance|90000|0|2|1|4|4|Electra|2|Green
+2|Lance|90000|0|2|1|4|4|Electra|3|Blue
+2|Lance|90000|0|2|1|4|4|Electra|4|Silver
+2|Lance|90000|0|2|1|4|4|Electra|5|Black
+2|Lance|90000|0|2|1|4|5|Schwinn|1|Red
+2|Lance|90000|0|2|1|4|5|Schwinn|2|Green
+2|Lance|90000|0|2|1|4|5|Schwinn|3|Blue
+2|Lance|90000|0|2|1|4|5|Schwinn|4|Silver
+2|Lance|90000|0|2|1|4|5|Schwinn|5|Black
+2|Lance|90000|0|2|1|4|6|Marin|1|Red
+2|Lance|90000|0|2|1|4|6|Marin|2|Green
+2|Lance|90000|0|2|1|4|6|Marin|3|Blue
+2|Lance|90000|0|2|1|4|6|Marin|4|Silver
+2|Lance|90000|0|2|1|4|6|Marin|5|Black
+3|Lizzy|60000|0|6|2|5|1|Raleigh|1|Red
+3|Lizzy|60000|0|6|2|5|1|Raleigh|2|Green
+3|Lizzy|60000|0|6|2|5|1|Raleigh|3|Blue
+3|Lizzy|60000|0|6|2|5|1|Raleigh|4|Silver
+3|Lizzy|60000|0|6|2|5|1|Raleigh|5|Black
+3|Lizzy|60000|0|6|2|5|2|Trek|1|Red
+3|Lizzy|60000|0|6|2|5|2|Trek|2|Green
+3|Lizzy|60000|0|6|2|5|2|Trek|3|Blue
+3|Lizzy|60000|0|6|2|5|2|Trek|4|Silver
+3|Lizzy|60000|0|6|2|5|2|Trek|5|Black
+3|Lizzy|60000|0|6|2|5|3|Nishiki|1|Red
+3|Lizzy|60000|0|6|2|5|3|Nishiki|2|Green
+3|Lizzy|60000|0|6|2|5|3|Nishiki|3|Blue
+3|Lizzy|60000|0|6|2|5|3|Nishiki|4|Silver
+3|Lizzy|60000|0|6|2|5|3|Nishiki|5|Black
+3|Lizzy|60000|0|6|2|5|4|Electra|1|Red
+3|Lizzy|60000|0|6|2|5|4|Electra|2|Green
+3|Lizzy|60000|0|6|2|5|4|Electra|3|Blue
+3|Lizzy|60000|0|6|2|5|4|Electra|4|Silver
+3|Lizzy|60000|0|6|2|5|4|Electra|5|Black
+3|Lizzy|60000|0|6|2|5|5|Schwinn|1|Red
+3|Lizzy|60000|0|6|2|5|5|Schwinn|2|Green
+3|Lizzy|60000|0|6|2|5|5|Schwinn|3|Blue
+3|Lizzy|60000|0|6|2|5|5|Schwinn|4|Silver
+3|Lizzy|60000|0|6|2|5|5|Schwinn|5|Black
+3|Lizzy|60000|0|6|2|5|6|Marin|1|Red
+3|Lizzy|60000|0|6|2|5|6|Marin|2|Green
+3|Lizzy|60000|0|6|2|5|6|Marin|3|Blue
+3|Lizzy|60000|0|6|2|5|6|Marin|4|Silver
+3|Lizzy|60000|0|6|2|5|6|Marin|5|Black
+5|Amanda|90000|0|1|1|5|1|Raleigh|1|Red
+5|Amanda|90000|0|1|1|5|1|Raleigh|2|Green
+5|Amanda|90000|0|1|1|5|1|Raleigh|3|Blue
+5|Amanda|90000|0|1|1|5|1|Raleigh|4|Silver
+5|Amanda|90000|0|1|1|5|1|Raleigh|5|Black
+5|Amanda|90000|0|1|1|5|2|Trek|1|Red
+5|Amanda|90000|0|1|1|5|2|Trek|2|Green
+5|Amanda|90000|0|1|1|5|2|Trek|3|Blue
+5|Amanda|90000|0|1|1|5|2|Trek|4|Silver
+5|Amanda|90000|0|1|1|5|2|Trek|5|Black
+5|Amanda|90000|0|1|1|5|3|Nishiki|1|Red
+5|Amanda|90000|0|1|1|5|3|Nishiki|2|Green
+5|Amanda|90000|0|1|1|5|3|Nishiki|3|Blue
+5|Amanda|90000|0|1|1|5|3|Nishiki|4|Silver
+5|Amanda|90000|0|1|1|5|3|Nishiki|5|Black
+5|Amanda|90000|0|1|1|5|4|Electra|1|Red
+5|Amanda|90000|0|1|1|5|4|Electra|2|Green
+5|Amanda|90000|0|1|1|5|4|Electra|3|Blue
+5|Amanda|90000|0|1|1|5|4|Electra|4|Silver
+5|Amanda|90000|0|1|1|5|4|Electra|5|Black
+5|Amanda|90000|0|1|1|5|5|Schwinn|1|Red
+5|Amanda|90000|0|1|1|5|5|Schwinn|2|Green
+5|Amanda|90000|0|1|1|5|5|Schwinn|3|Blue
+5|Amanda|90000|0|1|1|5|5|Schwinn|4|Silver
+5|Amanda|90000|0|1|1|5|5|Schwinn|5|Black
+5|Amanda|90000|0|1|1|5|6|Marin|1|Red
+5|Amanda|90000|0|1|1|5|6|Marin|2|Green
+5|Amanda|90000|0|1|1|5|6|Marin|3|Blue
+5|Amanda|90000|0|1|1|5|6|Marin|4|Silver
+5|Amanda|90000|0|1|1|5|6|Marin|5|Black
+6|Fred|55000|1|5|2|2|1|Raleigh|1|Red
+6|Fred|55000|1|5|2|2|1|Raleigh|2|Green
+6|Fred|55000|1|5|2|2|1|Raleigh|3|Blue
+6|Fred|55000|1|5|2|2|1|Raleigh|4|Silver
+6|Fred|55000|1|5|2|2|1|Raleigh|5|Black
+6|Fred|55000|1|5|2|2|2|Trek|1|Red
+6|Fred|55000|1|5|2|2|2|Trek|2|Green
+6|Fred|55000|1|5|2|2|2|Trek|3|Blue
+6|Fred|55000|1|5|2|2|2|Trek|4|Silver
+6|Fred|55000|1|5|2|2|2|Trek|5|Black
+6|Fred|55000|1|5|2|2|3|Nishiki|1|Red
+6|Fred|55000|1|5|2|2|3|Nishiki|2|Green
+6|Fred|55000|1|5|2|2|3|Nishiki|3|Blue
+6|Fred|55000|1|5|2|2|3|Nishiki|4|Silver
+6|Fred|55000|1|5|2|2|3|Nishiki|5|Black
+6|Fred|55000|1|5|2|2|4|Electra|1|Red
+6|Fred|55000|1|5|2|2|4|Electra|2|Green
+6|Fred|55000|1|5|2|2|4|Electra|3|Blue
+6|Fred|55000|1|5|2|2|4|Electra|4|Silver
+6|Fred|55000|1|5|2|2|4|Electra|5|Black
+6|Fred|55000|1|5|2|2|5|Schwinn|1|Red
+6|Fred|55000|1|5|2|2|5|Schwinn|2|Green
+6|Fred|55000|1|5|2|2|5|Schwinn|3|Blue
+6|Fred|55000|1|5|2|2|5|Schwinn|4|Silver
+6|Fred|55000|1|5|2|2|5|Schwinn|5|Black
+6|Fred|55000|1|5|2|2|6|Marin|1|Red
+6|Fred|55000|1|5|2|2|6|Marin|2|Green
+6|Fred|55000|1|5|2|2|6|Marin|3|Blue
+6|Fred|55000|1|5|2|2|6|Marin|4|Silver
+6|Fred|55000|1|5|2|2|6|Marin|5|Black
+
+I'll spare you the *complete insanity* of multiplying by the 3 types.
