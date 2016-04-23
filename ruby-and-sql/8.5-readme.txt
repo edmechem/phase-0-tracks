@@ -1,0 +1,16 @@
+8.5 - Combining SQL & Ruby
+Ed Mechem
+
+Multi-modal GMaps Helper
+
+
+Google Maps is lovely. You can pick a couple of points on the map, and choose Driving, or Transit, or Walking, or Bicycling. It's even kind enough, that when you choose transit, it fills in Walking if transit doesn't go *exactly* the full distance between the two points.
+
+But....  what if you want to choose:   bike BART walk?
+
+Like say...  bike from your house in Oakland, to Macarthur BART (leave bike in locker), BART to Montgomery, and then walk to DBC?
+
+Sorry, no can do!!
+
+Until now....
+
