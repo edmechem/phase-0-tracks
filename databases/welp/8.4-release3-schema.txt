@@ -1,0 +1,28 @@
+8.4 Pairing - Many-to-Many
+Ed Mechem & Renan Souza
+
+Real-world schema
+
+A "movie_theater_showing" instance, will have its own primary key ID, as well as two booleans: whether the showing is 3D and whether it's IMAX, and finally, the three foreign keys, for movie (name of movie), theater (name of theater), and showing (time of showing).
+                                         movies
+                                         +--------------------------+
+movie_theater_showing                    | id (integer primary key) |
++--------------------------+             +--------------------------+
+| id (integer primary key) |      +------| name (varchar 255)       |
++--------------------------+      |      +--------------------------+
+| three_d (boolean         |      |
++--------------------------+      |
+| imax (boolean)           |      |      theaters
++--------------------------+      |      +--------------------------+
+| movie_id (int)           |------+      | id (integer primary key) |
++--------------------------+             +--------------------------+
+| theater_id (int)         |-------------| name (varchar 255)       |
++--------------------------+             +--------------------------+
+| showing_id (int)         |------+
++--------------------------+      |
+                                  |      showings
+                                  |      +--------------------------+
+                                  |      | id (integer primary key) |
+                                  |      +--------------------------+
+                                  +------| time (varchar 255)       |
+                                         +--------------------------+

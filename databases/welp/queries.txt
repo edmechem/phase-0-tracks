@@ -1,0 +1,28 @@
+8.4 - Release 2
+
+Question 2 - Join 3 tables:
+
+sqlite> SELECT * FROM reviews, businesses, users WHERE reviews.business_id = businesses.id AND reviews.user_id = users.id;
+1|5|lovely wedding location!!|1|1|1|Grundy Hollow Wedding Chapel|1|Bradford|Pitt
+2|2|not so good, takes too long|2|7|2|Amir's Towing|7|Denzel|George
+3|4|food was awesome, but not many beverage options|6|3|6|Sushi World|3|Angela|Jolie
+4|5|hot studio, hot class, hot hot hot!|4|4|4|Lotus Yoga|4|Steven|Wonder
+
+
+
+Question 3 - Join 3 tables:
+
+sqlite> SELECT users.first_name, reviews.stars, reviews.comment, businesses.name FROM reviews JOIN users ON reviews.user_id = users.id JOIN businesses ON reviews.business_id = businesses.id;
+
+Bradford|5|lovely wedding location!!|Grundy Hollow Wedding Chapel
+Denzel|2|not so good, takes too long|Amir's Towing
+Angela|4|food was awesome, but not many beverage options|Sushi World
+Steven|5|hot studio, hot class, hot hot hot!|Lotus Yoga
+
+
+
+Question 4 - One particular business:
+
+sqlite> SELECT users.first_name, reviews.stars, reviews.comment, businesses.name FROM reviews JOIN users ON reviews.user_id = users.id JOIN businesses ON reviews.business_id = businesses.id WHERE businesses.id = 1;
+
+Bradford|5|lovely wedding location!!|Grundy Hollow Wedding Chapel
