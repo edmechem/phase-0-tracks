@@ -1,16 +1,124 @@
 8.5 - Combining SQL & Ruby
 Ed Mechem
 
-Multi-modal GMaps Helper
+Google Maps Directions: transit + bicycle assistant
+
+Summary:
+
+Google Maps Directions allows you to choose Driving, or Walking, or Bicycling or Transit - but it doesn't allow you to combine these modes (with one small exception, see below).
+
+This assistant is very simple: it will help the user plan a trip that involves multiple segments, via different modes - specifically, mixing in transit with bicycling.
+
+But it's limited in terms of what it can do. We are simply generating a series of links, which will bring up separate Google Maps, in separate browser tabs. Read on for the explanion of why we have this limitation.
 
 
-Google Maps is lovely. You can pick a couple of points on the map, and choose Driving, or Transit, or Walking, or Bicycling. It's even kind enough, that when you choose transit, it fills in Walking if transit doesn't go *exactly* the full distance between the two points.
+Detailed Background:
 
-But....  what if you want to choose:   bike BART walk?
+If we were writing this next week after learning JQuery, we could tap into the Google Maps API which would allow us to enhance this further, by adding in "Arrive By" or "Leave By" timing. But even if or when using the official API - there would still be no way to combine segments of different modes (with the exception of walking segments, which are automatically suggested to connect transit segments), into one trip, displayed on one Google Map.
 
-Like say...  bike from your house in Oakland, to Macarthur BART (leave bike in locker), BART to Montgomery, and then walk to DBC?
+There is a feature of Google Maps called "My Maps", which lets you store various points of interest you've defined, kind of like your own saved favorite places, and then get directions between them. But unfortunately My Maps doesn't allow choosing Transit as your mode of travel between your saved places; it allows Driving or Walking or Bicycling.
 
-Sorry, no can do!!
+For a given set of directions, you must chose one & only one mode. You can choose multiple destinations, but when you do this, they all fall under the single mode you've selected. Furthermore, when doing so, you can't select Transit mode. Driving, Walking & Bicycling all allow multiple destinations - but Transit is this odd hybrid mode where only one destination is allowed, and Walking segments will be suggested to fill in the gaps between Transit segments.
 
-Until now....
+Clearly Google Maps has a ways to go in terms of flexibility when combining modes of travel. Multi-modal travel is admittedly a feature that only a small minority of people are interested in. However, it's not insignificant. Every day, thousands of people lock their bicycles at BART stations or in BikeLink lockers, and take BART or other transit to their destination. Additionally, hundreds take their bikes *on* transit, most notably on CalTrain (up to ~80 bikes per train) and on BART (up to ~50 bikes per train). These users (I am often one of them) have gotten used to having to manually perform multiple queries to mapping & transit scheduling apps, for the various segments of their journey.
+
+For example, when headed to the South Bay via bike + transit, if it's during rush hour, then the speed of Caltrain's "bullet trains" (very limited stop express trains) makes it worth my while to: bike to Macarthur, BART to Powell, bike to Caltrain 4th & King, then Caltrain bullet to Mountain View or San Jose. But if it's not during rush hour, then I'm not saving much time doing so, thus will opt for the simpler & easier journey: bike to Macarthur, BART to Millbrae, and then easy & direct transfer to Caltrain at Millbrae.
+
+Before beginning this project, I'd hoped there might be a simple way to combine various segments using different modes, into one route, displayable on Google Maps as a single trip. Some hours of research later, I realize this is not currently possible - even were I to use the official Google Maps Directions API.
+
+Thus, this is kind of a dead-end project. Still: it's a worthwhile project to build, if only for the satisfaction of semi-automating some of the drudge work necessary to research a new-to-me trip route, that combines bicycling & transit.
+
+The only way I can see to actually improve this situation going forward, would be for Google to build this functionality into Google Maps. Which, I will suggest that they do.
+
+I think that the small minority of transit users & bicyclists willing to combine these two modes, is in part due to this chicken-or-egg situation: It's tedious to plan a trip using both modes, thus not many people do it, thus Google Maps doesn't place a high priority on supporting it. However, I would argue that the social good is high enough that Google *should* implement this.
+
+More people on transit means fewer people driving, which means cleaner air & less traffic on roads; more people bicycling means all the above plus healthier & happier people. Making it easier to combine the two, would result in more people doing so. Services such as Google Maps should be doing their part to promote this social good.
+
+
+Implementation Details:
+
+Google Maps Directions URL syntax is described (among other places) here:
+http://asnsblues.blogspot.com/2011/11/google-maps-query-string-parameters.html
+This is an old page (2011) but some of the syntax still works, namely:
+
+saddr=      Source address (address + either zipcode, or city & state)
+daddr=      Destination address (^ same)
+dirflg=     w (walking), b (bicycling), r ("rail?", i.e. transit),
+            x (driving & transit)
+t=          m (map), k (satellite) -- defaults to m
+
+So:
+http://www.google.com/maps?saddr=217+John+94611&daddr=555+40th+St+94609&dirflg=b
+is bicycling directions from my house to Macarthur BART, and:
+http://www.google.com/maps?saddr=Macarthur+Station+94609&daddr=633+Folsom+94107&dirflg=r
+is transit directions from Macarthur BART to DBC.
+
+Our database schema is as follows:
+
+trips
++-------------------------------+
+| id (integer primary key)      |
++-------------------------------+
+| description                   |----+
++-------------------------------+    |
+                                     |
+                                     |
+trips_segments (join table)          |
++-------------------------------+    |
+| id (integer primary key)      |    |
++-------------------------------+    |
+| trip_id (int)                 |----+
++-------------------------------+
+| segment_id (int)              |----+
++-------------------------------+    |
+                                     |
+                                     |
+segments                             |
++-------------------------------+    |
+| id (integer primary key)      |    |
++-------------------------------+    |
+| description (varchar 255)     |----+
++-------------------------------+
+| mode (varchar 255)            |
++-------------------------------+
+| source_location_id (int)      |---------+
++-------------------------------+         |
+| destination_location_id (int) |----+    |
++-------------------------------+    |    |
+                                     |    |
+                                     |    |
+locations                            |    |
++-------------------------------+    |    |
+| id (integer primary key)      |    |    |
++-------------------------------+    |    |
+| name (varchar 255)            |----+----+
++-------------------------------+
+| address (varchar 255)         |
++-------------------------------+
+| by_zip (boolean)              |
++-------------------------------+
+| zipcode (int)                 |
++-------------------------------+
+| city (varchar 255)            |
++-------------------------------+
+| state (varchar 255)           |
++-------------------------------+
+
+The code in Ruby will prompt user to:
+
+- Set up new locations
+    - For each location, user can choose to enter a zipcode for it,
+      or enter a city & state.
+- Set up a new trip
+    - Set up segments of the trip, choosing mode for each segment.
+        - Transit mode implies auto-generated walking directions, however
+          user can choose a segment that's purely a walking mode,
+          as in: "yes, I could take a bus for that segment, but
+          I'd prefer to walk it".
+        - Modes are either: r (transit), b (bicycle), w (walk), or d (drive).
+- Map it
+
+- When run after initial setup, the code will ask user whether they want to map an existing trip, modify an existing trip, or add new locations, segments or trips.
+
+- The "Map it" code will open up as many web browser tabs as there are segments, for the selected trip.
 
