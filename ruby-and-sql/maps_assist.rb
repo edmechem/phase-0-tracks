@@ -5,16 +5,48 @@
 require 'sqlite3'
 
 
-# Classes & Methods & SQL command blocks
+# SQL command blocks & Classes & Methods
 
-
-create_trips_table_cmd == <<-SQL
-
-
+create_locations_table_cmd = <<-SQL
+  CREATE TABLE IF NOT EXISTS locations(
+    id INTEGER PRIMARY KEY,
+    name VARCHAR(255),
+    address VARCHAR(255),
+    by_zip BOOLEAN,
+    zip INT,
+    city VARCHAR(255),
+    state VARCHAR(255)
+  )
 SQL
 
+create_segments_table_cmd = <<-SQL
+  CREATE TABLE IF NOT EXISTS segments(
+    id INTEGER PRIMARY KEY,
+    name VARCHAR(255),
+    mode VARCHAR(255),
+    source_location_id INT,
+    destination_location_id INT,
+    FOREIGN KEY (source_location_id) REFERENCES locations(id),
+    FOREIGN KEY (destination_location_id) REFERENCES locations(id)
+  )  
+SQL
 
+create_trips_table_cmd = <<-SQL
+  CREATE TABLE IF NOT EXISTS trips(
+    id INTEGER PRIMARY KEY,
+    name VARCHAR(255)
+  )
+SQL
 
+create_trips_segments_table_cmd = <<-SQL
+  CREATE TABLE IF NOT EXISTS trips_segments(
+    id INTEGER PRIMARY KEY,
+    trip_id INT,
+    segment_id INT,
+    FOREIGN KEY (trip_id) REFERENCES trips(id),
+    FOREIGN KEY (segment_id) REFERENCES segments(id)
+  )
+SQL
 
 
 
@@ -28,7 +60,10 @@ SQL
 db = SQLite3::Database.new("maps_assist.db")
 
 # Create tables (if they don't already exist)
-
+db.execute(create_locations_table_cmd)
+db.execute(create_segments_table_cmd)
+db.execute(create_trips_table_cmd)
+db.execute(create_trips_segments_table_cmd)
 
 
 # Main Menu - Ask what user wants to do. Choices are:
