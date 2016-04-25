@@ -143,6 +143,7 @@ def display_count(ui_state, term_width, db)
 	count_cmd = "SELECT COUNT(*) FROM " + ui_state.downcase
 	count = db.execute(count_cmd)[0][0]
 
+
 	# display it
 	puts "There are #{count} #{ui_state.downcase}.".ljust(24).center(term_width)
 	puts ""
@@ -151,24 +152,119 @@ end
 
 def display_items(ui_state, term_width, db)
 	
-	# grab count of items
-	count_cmd = "SELECT COUNT(*) FROM " + ui_state.downcase
-	count = db.execute(count_cmd)[0][0]
+	# build select command & execute it
+	select_cmd = "SELECT * FROM " + ui_state.downcase
+	items = db.execute(select_cmd)
 
-	# display it
-	puts "There are #{count} #{ui_state.downcase}."
-	puts "Hit any key to continue..."
-	gets
-	# trips = db.execute(
-	# 	"SELECT * FROM trips"
-	# )
-	# trips.each { | trip | puts "Trip info: #{trip}"}
+	# puts "Items: #{items}, Class: #{items.class}"
+
+	# display them
+	items.each_index do | i |
+		item = items[i]
+		id_just = item['id'].to_s.rjust(2)
+		puts "#{id_just}: #{item['name']}".ljust(40).center(term_width)
+	end
+
+end
+
+def spaces_to_pluses(string)
+	string.gsub(' ', '+')
+end
+
+def map_item(ui_state, term_width, db, item_input)
+
+	# we need to branch & do different behavior based on what the item is
+	if ui_state == "Locations"
+	
+		# build select command & execute it
+		select_cmd = "SELECT * FROM locations WHERE id = #{item_input}"
+		item = db.execute(select_cmd)[0]
+		# test, display it
+		# puts "Item: #{item}, Class: #{item.class}"
+		# puts "by_zip: #{item['by_zip'].to_s}"
+
+		# build url
+		url = "https://maps.google.com/maps?q="
+		url += spaces_to_pluses(item['address']) + "+"
+		if item['by_zip'] == 1
+			url += item['zip'].to_s
+		else
+			url += item['city'] + "+" + item['state']
+		end
+		
+		# open url
+		IO.popen("open " + url)
+
+
+	elsif ui_state == "Segments" || ui_state == "Trips"
+		
+		# build select segment command & execute it
+		select_cmd = "SELECT * FROM segments WHERE id = #{item_input}"
+		segment = db.execute(select_cmd)[0]
+
+		# test, display it
+		# puts "Segment: #{segment}, Class: #{segment.class}"
+
+		# build select source command & execute it
+		select_cmd = "SELECT * FROM locations WHERE id = #{segment['source_location_id']}"
+		source = db.execute(select_cmd)[0]
+
+		# build select destination command & execute it
+		select_cmd = "SELECT * FROM locations WHERE id = #{segment['destination_location_id']}"
+		destination = db.execute(select_cmd)[0]
+
+		# build url
+		url = "https://maps.google.com/maps?saddr="
+
+		url += spaces_to_pluses(source['address']) + "+"
+		if source['by_zip'] == 1
+			url += source['zip'].to_s
+		else
+			url += source['city'] + "+" + source['state']
+		end
+
+		url += "&daddr="
+
+		url += spaces_to_pluses(destination['address']) + "+"
+		if destination['by_zip'] == 1
+			url += destination['zip'].to_s
+		else
+			url += destination['city'] + "+" + destination['state']
+		end
+
+		url += "&dirflg=#{segment['mode']}"
+
+		url = "'" + url + "'"
+		# puts url
+		IO.popen("open " + url)
+	end
 end
 
 
+def map_trip(ui_state, term_width, db, item_input)
+
+	# build select trip command & execute it
+	# mainly to retrieve name of trip :)
+	# select_cmd = "SELECT * FROM trips WHERE id = #{item_input}"
+	# trip = db.execute(select_cmd)[0]
+	# puts "Trip #{item_input}: #{trip['name']} is comprised of:"
 
 
+	# one trip is really...  an array of segments
+	# build select trip (ahem, segments) command & execute it
+	select_cmd = "SELECT * FROM trips_segments WHERE trip_id = #{item_input}"
+	trips_segments = db.execute(select_cmd)
 
+	# puts "This is a: #{trips_segments.class}"
+	# puts trips_segments
+
+	# For as many segments as there are, map each of them
+	trips_segments.each_index do | i |
+		# puts "Segment ID: #{trips_segments[i]['segment_id']}"
+		map_item(ui_state, term_width, db, trips_segments[i]['segment_id'])
+	end
+	
+end
 
 
 
@@ -176,6 +272,7 @@ end
 
 # Create maps_assist.db (if it doesn't already exist)
 db = SQLite3::Database.new("maps_assist.db")
+db.results_as_hash = true
 
 # Create tables (if they don't already exist)
 db.execute(create_locations_table_cmd)
@@ -341,15 +438,39 @@ until done
 			status.ui_state = "Locations"
 			# nothing else, we're done
 
-		elsif (input == "m" || input == "e" || input == "d" || input == "n")
+		elsif (input == "m" || input == "e" || input == "d")
 			action = actions[input]
-			puts "#{action} a #{status.ui_state.downcase.chop}".ljust(40).center(term_width)
-			
+			puts "Select a #{status.ui_state.downcase.chop} to #{action.downcase}:".ljust(40).center(term_width)
+			display_items(status.ui_state, term_width, db)			
+
+			# This could go in a while loop with error checking... but not for 1.0
+			puts ""
+			puts "Type # then hit return:"
+			item_input = gets.chomp.to_i
+
+			if input == "m"
+				if status.ui_state == "Trips"
+					map_trip(status.ui_state, term_width, db, item_input)
+				else
+					map_item(status.ui_state, term_width, db, item_input)
+				end
+				gets
+
+			elsif input == "e"
+				# yet to build!
+				puts "Editing!? what's that?"
+				gets
+			elsif input == "d"
+				# yet to build!
+				puts "Deleting!? what's that?"
+				gets
+			end
+
+		elsif (input ==  "n")
+			action = actions[input]
+			# yet to build
+			puts "New item!? what's that?"
 			gets
-
-
-
-
 		end
 	end
 
@@ -381,4 +502,3 @@ end
 # After they do so, ask what to do. Choices are:
 #     (M)ap it, (C)hange it, (D)elete it, (N)ew Location, (B)ack to Main
 #         (if no locations, menu will only show (N)ew Location & (B)ack to Main)
-

@@ -1,6 +1,7 @@
 8.5 - Combining SQL & Ruby
 Ed Mechem
 
+"Maps Assist"
 Google Maps Directions: transit + bicycle assistant
 
 Summary:
@@ -26,13 +27,13 @@ For example, when headed to the South Bay via bike + transit, if it's during rus
 
 Before beginning this project, I'd hoped there might be a simple way to combine various segments using different modes, into one route, displayable on Google Maps as a single trip. Some hours of research later, I realize this is not currently possible - even were I to use the official Google Maps Directions API.
 
-Thus, this is kind of a dead-end project. Still: it's a worthwhile project to build, if only for the satisfaction of semi-automating some of the drudge work necessary to research a new-to-me trip route, that combines bicycling & transit.
+Thus, this is kind of a dead-end project. Still: it's kind of a worthwhile project to build, if only for the satisfaction of semi-automating some of the drudge work necessary to research a new-to-me trip route, that combines bicycling & transit.
 
 The only way I can see to actually improve this situation going forward, would be for Google to build this functionality into Google Maps. Which, I will suggest that they do.
 
 I think that the small minority of transit users & bicyclists willing to combine these two modes, is in part due to this chicken-or-egg situation: It's tedious to plan a trip using both modes, thus not many people do it, thus Google Maps doesn't place a high priority on supporting it. However, I would argue that the social good is high enough that Google *should* implement this.
 
-More people on transit means fewer people driving, which means cleaner air & less traffic on roads; more people bicycling means all the above plus healthier & happier people. Making it easier to combine the two, would result in more people doing so. Services such as Google Maps should be doing their part to promote this social good.
+More people on transit means fewer people driving, which means cleaner air & less traffic on roads; more people bicycling means all the above plus healthier & happier people. Making it easier to combine the two, would result in more people doing so. Services such as Google Maps should be doing their part to promote this.
 
 
 Implementation Details:
@@ -51,7 +52,7 @@ So:
 http://www.google.com/maps?saddr=217+John+94611&daddr=555+40th+St+94609&dirflg=b
 is bicycling directions from my house to Macarthur BART, and:
 http://www.google.com/maps?saddr=Macarthur+Station+94609&daddr=633+Folsom+94107&dirflg=r
-is transit directions from Macarthur BART to DBC.
+is transit directions from Macarthur BART to DBC (which will auto-include walking directions from Montgomery BART to DBC)
 
 Our database schema is as follows:
 
@@ -59,7 +60,7 @@ trips
 +-------------------------------+
 | id (integer primary key)      |
 +-------------------------------+
-| description                   |----+
+| name                          |----+
 +-------------------------------+    |
                                      |
                                      |
@@ -77,7 +78,7 @@ segments                             |
 +-------------------------------+    |
 | id (integer primary key)      |    |
 +-------------------------------+    |
-| description (varchar 255)     |----+
+| name        (varchar 255)     |----+
 +-------------------------------+
 | mode (varchar 255)            |
 +-------------------------------+
@@ -97,7 +98,7 @@ locations                            |    |
 +-------------------------------+
 | by_zip (boolean)              |
 +-------------------------------+
-| zipcode (int)                 |
+| zip     (int)                 |
 +-------------------------------+
 | city (varchar 255)            |
 +-------------------------------+
@@ -121,4 +122,24 @@ The code in Ruby will prompt user to:
 - When run after initial setup, the code will ask user whether they want to map an existing trip, modify an existing trip, or add new locations, segments or trips.
 
 - The "Map it" code will open up as many web browser tabs as there are segments, for the selected trip.
+
+
+1.0 Limitations:
+
+- All items will display, even if it causes prior instructions to scroll off the screen. "Paging" thru groups of items is a feature that *did not make it* into the 1.0 release.
+
+- Not doing much error checking.  Like, it'll error if you try to delete a trip when there *aren't* any. Or if you mistype an item # you're trying to select.
+
+- User must type out actual SQL IDs to select items. Ug, gross.. what happens after we've deleted some? Missing #s! Etc.  Too short on time to ship the 1.0 with abstracted nice sequential pick lists.
+
+- Umm...  well, the mapping works. That's kinda important & shows off the concept well.  But the editing, deleting & adding -- haven't built that just yet.  Guess this is really...  a beta version!  Not a 1.0.
+
+- Interested users can always do sqlite3 maps_assist.db from the commandline, then do .dump to see what the values are.
+
+
+I spent an hour or two researching, and probably about 10-12 hours developing.  The UI was a lot of work; keeping track of state, what to draw on the screen when.  Learned a couple of things about the IO class, i.e. giving Ruby awareness of terminal window width, plus of course, telling the command line to open a URL (which results in user's web browser actually opening it, as it should).  And of course learned some things about using SQL from within Ruby.
+
+Again, this is kind of...  an interesting concept, but I'd imagine, not super reflective of the type of developing we'll be doing once we know jquery & Sinatra, Rails etc.
+
+And...  that's all!  Wow, you read all the way thru! (or didn't)
 
