@@ -4,8 +4,10 @@
 # require gems
 require 'sqlite3'
 
+# so we can get console width, so we can center output nicely
+require 'io/console'
 
-# SQL command blocks & Classes & Methods
+# SQL command blocks
 
 create_locations_table_cmd = <<-SQL
   CREATE TABLE IF NOT EXISTS locations(
@@ -48,6 +50,18 @@ create_trips_segments_table_cmd = <<-SQL
   )
 SQL
 
+
+# Awesome, found here: https://www.ruby-forum.com/topic/106133
+# So, Screen.clear will clear the screen
+module Screen
+	def self.clear
+       print "\e[2J\e[f"
+    end
+end
+
+
+# Define Classes & Methods
+
 # Class Status, keeps track of:
 #    Current UI state (are we showing info for Main, Trip, Segment, or Location)
 #    Current count of rows, in each of three tables (to display in UI Menus)
@@ -60,36 +74,57 @@ class Status
 	def initialize(db)
 		@db = db
 		@ui_state = "Main"
-		update_all
+		update_table_counts
 	end
 
 	# Ugh - need to "de-array-ify" the result, *TWICE*,
 	# just to get the actual FixNum
-	def update_trips
+	def update_trips_count
 		@trips_count = @db.execute("SELECT COUNT(*) FROM trips")[0][0]
 	end
 
-	def update_segments
+	def update_segments_count
 		@segments_count = @db.execute("SELECT COUNT(*) FROM segments")[0][0]
 	end
 
-	def update_locations
+	def update_locations_count
 		@locations_count = @db.execute("SELECT COUNT(*) FROM locations")[0][0]
 	end
 
-	def update_all
-		update_trips
-		update_segments
-		update_locations
+	def update_table_counts
+		update_trips_count
+		update_segments_count
+		update_locations_count
 	end
 end
 
 
+# Display the various Menu Screens
+def	display_main
+	Screen.clear
+	puts "Main Menu"
+end
 
-# # Method to count how many rows in each
-# def get_locations(db)
-#   db.execute("SELECT * FROM locations")
-# end
+def	display_trips
+	Screen.clear
+	puts "Trips Menu"
+end
+
+def	display_segments
+	Screen.clear
+	puts "Segments Menu"
+end
+
+def	display_locations
+	Screen.clear
+	puts "Locations Menu"
+end
+
+
+
+
+
+
 
 
 
@@ -99,21 +134,67 @@ end
 db = SQLite3::Database.new("maps_assist.db")
 
 # Create tables (if they don't already exist)
-# uncomment when done; commented for now for speed
-# db.execute(create_locations_table_cmd)
-# db.execute(create_segments_table_cmd)
-# db.execute(create_trips_table_cmd)
-# db.execute(create_trips_segments_table_cmd)
+db.execute(create_locations_table_cmd)
+db.execute(create_segments_table_cmd)
+db.execute(create_trips_table_cmd)
+db.execute(create_trips_segments_table_cmd)
 
 # Create one & only instance of our "Status" class :)
+# This declares & populates our three table count variables,
+# as well as setting ui_state to "Main"
 status = Status.new(db)
 
+# Get terminal width, so output can be centered
+# Just for centering...  we'll presume at least 60 chars
+# It'll just look ugly if it's too narrow
+# Rounded down to closest even number
+term_width = IO.console.winsize[1]
+if term_width.odd?
+	term_width -=1
+end
 
-# # test code print UI state & count of rows in tables
-# puts "UI State is: #{status.ui_state}"
-# puts "Number of trips: #{status.trips_count} Class: #{status.trips_count.class}"
-# puts "Number of segments: #{status.segments_count} Class: #{status.segments_count.class}"
-# puts "Number of locations: #{status.locations_count} Class: #{status.locations_count.class}"
+
+# test code, to print UI state & table counts
+puts "UI State is: #{status.ui_state}"
+puts "Number of trips: #{status.trips_count} Class: #{status.trips_count.class}"
+puts "Number of segments: #{status.segments_count} Class: #{status.segments_count.class}"
+puts "Number of locations: #{status.locations_count} Class: #{status.locations_count.class}"
+
+puts ""
+# puts "Term width: #{term_width}"
+# puts ""
+puts "Hit return to continue..."
+gets.chomp
+
+
+# Main "event loop". Do all the stuff here,
+# until user indicates done by entering Q for Quit.
+done = false
+until done
+	if status.ui_state == "Main"
+		display_main
+	elsif status.ui_state == "Trips"
+		display_trips
+	elsif status.ui_state == "Segments"
+		display_segments
+	elsif status.ui_state == "Locations"
+		display_locations
+	# If I get to it...
+	# elsif status.ui_state == "About"
+	# 	display_about
+	end
+
+	# Grab their input. Only one character!
+	puts "What you wanna do?"
+	input = gets.chomp.byteslice(0)
+	if input == "q"
+		done = true
+		puts ""
+		puts "Bye!!!"
+		puts ""
+	end
+
+end
 
 
 
