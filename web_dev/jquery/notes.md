@@ -30,3 +30,31 @@ OK: So, I haven't built anything - yet. After reading Release 2 I realized that 
 
 #### Release 2: Make a Thing
 
+Alrighty. This will be my verbose journal about learning by using jQuery. I'll clean this up later, for submission. For now, this is for my benefit
+
+Went to jquery.com/download & got both the compressed production & uncompressed development file, for jQuery 2.2.3. Because who cares about IE 8 users. They can bloody well get with the 20-teens & *upgrade*. Moved both jquery-2.2.3.js (uncompressed development version) and jquery-2.2.3.min.js (compressed production version) into my jquery directory.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
