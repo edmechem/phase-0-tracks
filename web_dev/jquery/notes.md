@@ -22,7 +22,7 @@ Fairly often. I mean, my preferred style of learning is to implement everything 
 
 **Are breaks important?**
 
-Oh hells yes. There's like no way I've been able to lear all of phase zero without regular breaks. Sometimes I take a break right after I successfully do something, it's great to just let it absorb. Othertimes I'll take a break when I'm super confused. Talk myself out of / thru it. Simply talk out loud to myself about it, just expressing it helps.
+Oh hells yes. There's like no way I've been able to learn all of phase zero without regular breaks. Sometimes I take a break right after I successfully do something, it's great to just let it absorb. Othertimes I'll take a break when I'm super confused. Talk myself out of / thru it. Simply talk out loud to myself about it, just expressing it helps.
 
 #### Release 1: Study Up
 
@@ -30,31 +30,12 @@ OK: So, I haven't built anything - yet. After reading Release 2 I realized that 
 
 #### Release 2: Make a Thing
 
-Alrighty. This will be my verbose journal about learning by using jQuery. I'll clean this up later, for submission. For now, this is for my benefit
+Alrighty. This will be my litle journal about learning by using jQuery.
 
-Went to jquery.com/download & got both the compressed production & uncompressed development file, for jQuery 2.2.3. Because who cares about IE 8 users. They can bloody well get with the 20-teens & *upgrade*. Moved both jquery-2.2.3.js (uncompressed development version) and jquery-2.2.3.min.js (compressed production version) into my jquery directory.
+Went to jquery.com/download & got both the compressed production & uncompressed development file, for jQuery 2.2.3. Because who cares about IE 8 users; they can bloody well get with the 20-teens & *upgrade*, right? Right!👍 Moved both jquery-2.2.3.js (uncompressed development version) and jquery-2.2.3.min.js (compressed production version) into my jquery directory & renamed them to take off the version number.
 
+Made up a little page, using Hipster Ipsum; styled it slightly with a styles.css.
 
+Alrighty. Well, I think I've explored enough for this exercise. I've added listeners for click, mouseenter & mouseleave. Resulting in text changing color, or disappearing, or displaying an alert. Etc. And I've bookmarked a few sites with more examples.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+And, so - I went over the 45 minute limit a bit! Time to stop :)

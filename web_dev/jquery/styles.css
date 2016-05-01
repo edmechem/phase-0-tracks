@@ -1,0 +1,20 @@
+* {
+    font-family: "Helvetica", Helvetica, sans-serif;
+}
+
+p {
+	font-size: 125%;
+}
+
+.red {
+	color: red;
+}
+
+.purple {
+	color: purple;
+}
+
+.nothing {
+	// nothing...   used to toggle between nothing & purple
+	// because... nested events in jQuery, haven't mastered that yet!
+}
