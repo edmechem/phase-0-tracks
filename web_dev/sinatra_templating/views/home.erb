@@ -7,9 +7,10 @@
   <h1>Student Management System</h1>
   <p>Welcome to the student management system.</p>
   <p>Click <a href="students/new">here</a> to create a new student.</p>
+  <p>Click <a href="students/delete">here</a> to delete a student (note their ID first! That's what you'll enter to delete them).</p>
   <ul>
     <% @students.each do |student| %>
-      <li><%= student['name'] %>, <%= student['age'] %></li>
+      <li><%= student['id'] %> : <%= student['name'] %>, <%= student['age'] %></li>
     <% end %>
   </ul>
 </body>
